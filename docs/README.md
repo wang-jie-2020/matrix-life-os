@@ -1,13 +1,11 @@
 # Matrix Life OS Documentation
 
-This directory contains the project-level requirements for the fork reset.
-
-It intentionally avoids implementation notes, code maps, and current-code review material. Those should be produced later during the implementation review phase.
+This directory contains the project requirements.
 
 ## Documents
 
-- [Project Requirements](project-requirements.md): product scope and acceptance criteria, independent of implementation.
+- [Project Requirements](project-requirements.md): product requirements.
 
 ## Scope
 
-These docs intentionally do not promise roadmap items, backup workflows, cloud sync, account systems, or unverified implementation behavior.
+These docs do not describe implementation details.

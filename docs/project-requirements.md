@@ -1,225 +1,161 @@
 # Project Requirements
 
-This document defines the intended product scope for Matrix Life OS.
+This document describes what Matrix Life OS should do. It does not describe code structure or implementation details.
 
-It is a requirements document, not an implementation guide. It does not prescribe frameworks, storage libraries, file structure, or code organization.
+## Product Summary
 
-## 1. Product Positioning
+Matrix Life OS is a local-first personal management tool for:
 
-Matrix Life OS is a local-first personal operating system for organizing daily action, long-term direction, and self-review.
-
-It is not a general notes app, team project manager, calendar replacement, or cloud productivity suite. Its job is to help one person decide what matters, act on it during the week, and preserve meaningful evidence of progress.
-
-## 2. Target User
-
-The target user is an individual who wants a lightweight but opinionated system for:
-
-- Capturing loose thoughts and tasks.
-- Turning selected inputs into action.
-- Managing weekly execution.
-- Keeping goals visible.
-- Reflecting on progress.
-- Preserving meaningful outcomes locally.
-
-The product should serve repeated personal use, not one-off planning sessions.
-
-## 3. Core Problem
-
-Personal productivity tools often fail because they either collect too much, organize too little, or preserve everything with no judgment.
-
-Matrix Life OS should solve this by separating:
-
-- Capture: get thoughts out of the user's head.
-- Support: keep principles, context, and optional personal signals nearby.
-- Execution: decide what will actually be done.
-- Review: preserve reflections and meaningful completed outcomes.
-
-The product should help users reduce mental clutter without becoming another place to maintain indefinitely.
-
-## 4. Product Principles
-
-### Local First
-
-User data should primarily live on the user's own device.
-
-The product should not require an account, cloud sync, or a remote service for core use.
-
-### Small Surface Area
-
-The product should remain understandable as a three-area system:
-
-- Action
-- Review
-- System
-
-Features that require deep navigation or broad configuration should be treated skeptically.
-
-### Process Is Temporary, Evidence Is Valuable
-
-The product should not preserve every transient action forever by default.
-
-Long-term storage should emphasize meaningful artifacts:
-
+- Tasks.
+- Capture notes.
+- Goal notes.
 - Reflections.
-- Completed goals or equivalent milestones.
-- User-defined principles or self-knowledge.
 
-### Opinionated Flow
+It is for one person managing their own records. It is not a team project manager, cloud productivity suite, or calendar replacement.
 
-The product should encourage a one-way movement from capture to support, execution, and review.
+## Core Records
 
-It should avoid becoming a free-form database where every item can mean anything.
+### Task
 
-### Honest Capability
+The product must let the user:
 
-The product must not advertise a capability unless the user can actually use it.
+- Create a task.
+- View tasks on a weekly task board that shows all seven days of one week in the same view.
+- Open the weekly task board on the current week by default.
+- Switch the weekly task board to previous or next weeks.
+- Edit a task.
+- Delete a task.
+- Mark a task complete.
+- Mark a completed task incomplete.
+- Keep completed tasks visible on the weekly task board with a distinct completed state.
+- Create a task under a specific day on the weekly task board.
+- Move a task between days.
+- Reorder tasks within the same day.
 
-If a feature is incomplete, experimental, or unavailable, user-facing language should say so or omit it.
+Every task must belong to a day. Content without a day should be recorded as a capture note instead of a task.
 
-## 5. Required Product Areas
+### Capture Note
+
+The product must let the user:
+
+- Create a capture note.
+- View capture notes.
+- Edit a capture note.
+- Delete a capture note.
+
+Capture notes do not need to convert into tasks, goals, or other records.
+
+### Goal Note
+
+The product must let the user:
+
+- Create a goal note.
+- View goal notes.
+- Edit a goal note.
+- Delete a goal note.
+
+Goal notes do not need key results, task links, progress scoring, or completion status.
+
+### Reflection
+
+The product must let the user:
+
+- Create a reflection.
+- View reflections.
+- View a single reflection.
+- Edit a reflection.
+- Delete a reflection.
+- Assign a reflection to a day.
+
+## Record Relationships
+
+The product does not need links between the four core record types.
+
+- Capture notes do not need to convert into tasks.
+- Tasks do not need to link to goal notes.
+- Goal notes do not need to contain tasks or key results.
+- Reflections do not need to link to tasks or goal notes.
+
+## Product Areas
 
 ### Action Area
 
-The Action area should help the user move from input to execution.
+The Action area must support:
 
-It should include:
+- Capture notes.
+- A weekly task board.
+- A goal note area.
 
-- A fast place to capture tasks, ideas, and loose inputs.
-- A weekly task view.
-- A way to schedule or move work across days.
-- A goal or OKR-style area for connecting larger objectives to executable work.
-- Supporting context such as principles or calendar-like notes.
-
-The Action area should make today's work easy to identify.
+The task view must make today's tasks easy to identify.
 
 ### Review Area
 
-The Review area should help the user preserve learning and meaningful progress.
+The Review area must support:
 
-It should include:
-
-- A daily reflection entry flow.
-- A searchable or browsable reflection history.
-- A place to review completed objectives or comparable milestones.
-- A way to represent ability growth or skill focus, if this remains part of the product direction.
-
-The Review area should make accumulated progress visible without turning every completed task into permanent clutter.
+- Creating reflections.
+- Viewing past reflections.
 
 ### System Area
 
-The System area should contain low-frequency controls and maintenance surfaces.
+The System area must support:
 
-It should include:
+- Module or feature visibility controls.
+- Data status information that a user can understand.
+- Version information.
+- Short help information.
 
-- Module or feature visibility controls, where applicable.
-- Data health or status information.
-- Version/update information.
-- Product/manual/help information.
+## Data Requirements
 
-The System area should not be the primary place where daily work happens.
+The product must work without an account, cloud sync, or network access.
 
-## 6. Data And Privacy Requirements
+Core records must still exist after the app is closed and reopened.
 
-Core product use should work without network access, except for optional update checks or explicitly remote features.
+The user must be able to understand:
 
-The user should be able to understand:
+- Whether data is stored locally.
+- Where data is stored at a human level.
+- What data is saved.
 
-- Whether their data is local.
-- Where their primary data is stored at a human level.
-- What data is included in persistence.
-- What data is excluded from long-term storage, if any.
+If core records cannot be saved, the product must warn the user.
 
-The product should avoid silent data loss. If data cannot be saved, the user should receive a clear warning.
+## Backup And Recovery
 
-## 7. Backup And Recovery Requirements
+Manual backup and recovery are not requirements at this stage.
 
-Backup is a product-level safety requirement, but it must be honest.
+The product must not advertise backup, export, import, or recovery unless those features are added to this document later.
 
-If the product offers manual export:
+## Out Of Scope
 
-- Exported data must be complete for the stated backup type.
-- The export format should be understandable and portable.
-- The user should know whether the export is a full backup or a partial/high-value archive.
-
-If the product offers import:
-
-- Import behavior must clearly state whether it merges or replaces existing data.
-- Import should not leave the app in a mixed or ambiguous state without telling the user.
-- Failed import should not destroy existing data.
-
-If manual backup is not available:
-
-- The product must not instruct users to use an in-app backup workflow.
-- Any storage warning must avoid implying unavailable export or cleanup actions.
-
-Automatic local backup or recovery files may exist, but they are not a substitute for a user-understandable manual backup workflow unless that is explicitly documented.
-
-## 8. Module Scope
-
-The product may support optional modules, but optionality should not weaken the core flow.
-
-Core modules should be available without configuration.
-
-Optional modules may include:
-
-- Habits.
-- Mood tracking.
-- Time blocks.
-- Inspiration storage.
-- Entertainment or rest planning.
-
-Optional modules should have a clear reason to exist in the capture, support, execution, or review flow. They should not become unrelated trackers.
-
-## 9. Non-Goals
-
-The following are not required for the core product:
+The following are not requirements at this stage:
 
 - User accounts.
 - Cloud sync.
 - Collaboration.
 - Team workspaces.
-- Mobile companion apps.
 - Plugin marketplace.
-- Arbitrary database/page builder behavior.
 - Full calendar replacement.
 - Full habit coaching system.
-- Analytics dashboards for every stored item.
+- Analytics dashboards.
+- Manual backup and restore.
 
-These may be reconsidered later, but they should not be assumed in MVP scope.
+Other record types or modules should not be treated as requirements unless they are added to this document later.
 
-## 10. MVP Acceptance Criteria
+## Acceptance Criteria
 
-The MVP is acceptable when a user can:
+The product is acceptable when the user can:
 
-- Capture an input quickly.
-- Turn a captured input into a task, goal-related action, or supporting note.
-- Plan and manage work across a week.
-- Maintain at least one active objective or goal.
-- Write and later review reflections.
-- Preserve completed meaningful outcomes.
-- Configure low-frequency system settings.
-- Close and reopen the app without losing expected data.
-- Understand where data is stored and what backup options do or do not exist.
+- Manage tasks with the task operations listed above.
+- Manage capture notes with the capture note operations listed above.
+- Manage goal notes with the goal note operations listed above.
+- Manage reflections with the reflection operations listed above.
+- Hide or show features through System Area controls.
+- See understandable data status information.
+- See version information.
+- Read short help information.
+- Close and reopen the app without losing core records.
 
-The MVP is not acceptable if:
+The product is not acceptable if:
 
-- It advertises backup/export/import that the user cannot reach.
-- It loses core data across restart.
-- It requires cloud access for normal use.
-- It preserves every temporary item forever with no cleanup model.
-- It has major user-facing copy that contradicts actual capability.
-
-## 11. Future Scope
-
-Future versions may consider:
-
-- A complete manual backup and restore workflow.
-- Better recovery diagnostics.
-- Stronger import/export validation.
-- Search across reflections and archives.
-- More explicit weekly review rituals.
-- Safer update checks for forks.
-- Automated tests around persistence and migration behavior.
-
-Future scope should be added only when it has a clear product reason and does not undermine the small-surface-area principle.
-
+- It loses core records across restart.
+- It requires an account, cloud sync, or network access for core use.
+- It advertises backup, export, import, or recovery before those features are added to this document.
