@@ -1,11 +1,9 @@
-# Matrix Life OS Documentation
+# Matrix Life OS 文档
 
-This directory contains the project requirements.
+这里保存当前项目文档。
 
-## Documents
+## 文档
 
-- [Project Requirements](project-requirements.md): product requirements.
-
-## Scope
-
-These docs do not describe implementation details.
+- [Project Requirements](project-requirements.md): 项目需求说明。该文档不描述实现细节。
+- [Implementation Review](implementation-review.md): 当前实现相对项目需求的审查。
+- [Remediation Plan](remediation-plan.md): 实现整改项草案和建议顺序。
