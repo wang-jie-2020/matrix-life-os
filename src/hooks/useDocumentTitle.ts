@@ -8,6 +8,6 @@ export const useDocumentTitle = () => {
     const today = new Date().toISOString().split('T')[0];
     const todayTasks = tasks.filter((t) => t.date === today && t.status === 'active');
     const remaining = todayTasks.length;
-    document.title = remaining > 0 ? `[${remaining}] ASCII Life OS` : 'ASCII Life OS';
+    document.title = remaining > 0 ? `[${remaining}] Matrix Life OS` : 'Matrix Life OS';
   }, [tasks]);
 };

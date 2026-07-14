@@ -14,14 +14,18 @@ export const createModuleSlice: StateCreator<ModuleSlice> = (set, get) => ({
 
   toggleModule: (moduleId: ModuleId) =>
     set((state) => {
-      const isEnabled = state.enabledModules.includes(moduleId);
+      const current = state.enabledModules.length === 0 ? DEFAULT_ENABLED_MODULES : state.enabledModules;
+      const isEnabled = current.includes(moduleId);
       const next = isEnabled
-        ? state.enabledModules.filter((id) => id !== moduleId)
-        : [...state.enabledModules, moduleId];
+        ? current.filter((id) => id !== moduleId)
+        : [...current, moduleId];
       return { enabledModules: next };
     }),
 
   setEnabledModules: (modules: ModuleId[]) => set({ enabledModules: modules }),
 
-  isModuleEnabled: (moduleId: ModuleId) => get().enabledModules.includes(moduleId),
+  isModuleEnabled: (moduleId: ModuleId) => {
+    const enabled = get().enabledModules;
+    return enabled.length === 0 || enabled.includes(moduleId);
+  },
 });

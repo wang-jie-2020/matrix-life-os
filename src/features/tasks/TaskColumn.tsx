@@ -11,45 +11,31 @@ interface TaskColumnProps {
   tasks: Task[];
   title: string;
   dateLabel?: string;
-
 }
 
 const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dateLabel }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [newContent, setNewContent] = useState('');
-  const [selectedAbilityId, setSelectedAbilityId] = useState<string>('');
-  const [abilityPoints, setAbilityPoints] = useState<number>(10);
-  const [abilityPointsRaw, setAbilityPointsRaw] = useState<string>('10');
-  const { addTask, abilities } = useAppStore();
+  const addTask = useAppStore((s) => s.addTask);
 
   const today = new Date().toISOString().split('T')[0];
   const isToday = date === today;
-
   const droppableId = `column-${date}`;
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({ id: droppableId });
-
   const sortedTasks = [...tasks].sort((a, b) => a.order - b.order);
 
   const handleAdd = () => {
-    if (newContent.trim()) {
-      const abilityId = selectedAbilityId || undefined;
-      const points = selectedAbilityId ? abilityPoints : undefined;
-      addTask(newContent.trim(), date, abilityId, points);
-      setNewContent('');
-      setSelectedAbilityId('');
-      setAbilityPoints(10);
-      setAbilityPointsRaw('10');
-      setIsAdding(false);
-    }
+    const content = newContent.trim();
+    if (!content) return;
+    addTask(content, date);
+    setNewContent('');
+    setIsAdding(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleAdd();
-    if (e.key === 'Escape') {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') handleAdd();
+    if (event.key === 'Escape') {
       setNewContent('');
-      setSelectedAbilityId('');
-      setAbilityPoints(10);
-      setAbilityPointsRaw('10');
       setIsAdding(false);
     }
   };
@@ -58,9 +44,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
     <div
       className="task-column"
       style={{
-        border: isToday
-          ? '2px solid var(--accent-gold)'
-          : '1px solid var(--border-primary)',
+        border: isToday ? '2px solid var(--accent-gold)' : '1px solid var(--border-primary)',
         backgroundColor: 'var(--bg-secondary)',
         minWidth: 'var(--task-column-width, 140px)',
         flex: 1,
@@ -86,6 +70,11 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
             {dateLabel}
           </div>
         )}
+        {isToday && (
+          <div className="font-caption" style={{ color: 'var(--accent-gold)', marginTop: 'var(--space-1)' }}>
+            Today
+          </div>
+        )}
       </div>
 
       <div
@@ -99,7 +88,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
           transition: 'background-color var(--duration-instant)',
         }}
       >
-        <SortableContext items={sortedTasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={sortedTasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
           {sortedTasks.map((task) => (
             <TaskCard key={task.id} task={task} />
           ))}
@@ -114,16 +103,16 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
         }}
       >
         {isAdding ? (
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             <input
               autoFocus
               value={newContent}
-              onChange={(e) => setNewContent(e.target.value)}
+              onChange={(event) => setNewContent(event.target.value)}
               onKeyDown={handleKeyDown}
               onBlur={() => {
                 if (!newContent.trim()) setIsAdding(false);
               }}
-              placeholder="输入任务..."
+              placeholder="Add a task..."
               className="font-body"
               style={{
                 background: 'transparent',
@@ -135,72 +124,23 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
                 width: '100%',
                 outline: 'none',
                 caretColor: 'var(--accent-gold)',
-                marginBottom: 'var(--space-2)',
               }}
             />
-            {abilities.length > 0 && (
-              <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
-                <select
-                  value={selectedAbilityId}
-                  onChange={(e) => setSelectedAbilityId(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="font-caption"
-                  style={{
-                    flex: 1,
-                    background: 'var(--bg-tertiary)',
-                    border: '1px solid var(--border-primary)',
-                    color: 'var(--text-primary)',
-                    fontFamily: 'var(--font-mono)',
-                    padding: 'var(--space-1)',
-                  }}
-                >
-                  <option value="">-- 关联能力 --</option>
-                  {abilities.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name}
-                    </option>
-                  ))}
-                </select>
-                {selectedAbilityId && (
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={abilityPointsRaw}
-                    onChange={(e) => {
-                      const raw = e.target.value;
-                      setAbilityPointsRaw(raw);
-                      setAbilityPoints(raw ? parseFloat(raw) : 0);
-                    }}
-                    onKeyDown={handleKeyDown}
-                    placeholder="分值"
-                    className="font-caption"
-                    style={{
-                      width: '60px',
-                      background: 'var(--bg-tertiary)',
-                      border: '1px solid var(--border-primary)',
-                      color: 'var(--text-primary)',
-                      fontFamily: 'var(--font-mono)',
-                      padding: 'var(--space-1)',
-                    }}
-                  />
-                )}
-                <button
-                  onClick={handleAdd}
-                  className="font-caption"
-                  style={{
-                    background: 'var(--bg-tertiary)',
-                    border: '1px solid var(--accent-gold)',
-                    color: 'var(--accent-gold)',
-                    fontFamily: 'var(--font-mono)',
-                    padding: 'var(--space-1) var(--space-2)',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  确认
-                </button>
-              </div>
-            )}
+            <button
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={handleAdd}
+              className="font-caption"
+              style={{
+                background: 'var(--bg-tertiary)',
+                border: '1px solid var(--accent-gold)',
+                color: 'var(--accent-gold)',
+                fontFamily: 'var(--font-mono)',
+                padding: 'var(--space-1) var(--space-2)',
+                cursor: 'pointer',
+              }}
+            >
+              Add
+            </button>
           </div>
         ) : (
           <button
@@ -215,13 +155,6 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
               width: '100%',
               textAlign: 'center',
               padding: 'var(--space-1)',
-              transition: `color var(--duration-instant) var(--ease-instant)`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--text-primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--text-muted)';
             }}
           >
             [+]

@@ -8,17 +8,11 @@ interface ReflectionDetailModalProps {
   onClose: () => void;
 }
 
-const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({
-  reflection,
-  onClose,
-}) => {
+const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflection, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const reflectionTemplates = useAppStore((s) => s.reflectionTemplates);
-  const objectives = useAppStore((s) => s.objectives);
+  const deleteReflection = useAppStore((s) => s.deleteReflection);
 
   if (!reflection) return null;
-
-  const template = reflectionTemplates.find((t) => t.id === reflection.templateId);
 
   return (
     <div
@@ -26,10 +20,7 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({
       onClick={onClose}
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         backgroundColor: 'rgba(10, 10, 8, 0.85)',
         display: 'flex',
         alignItems: 'center',
@@ -39,12 +30,12 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({
     >
       <div
         className="modal-content"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
         style={{
           backgroundColor: 'var(--bg-secondary)',
           border: '1px solid var(--border-primary)',
           padding: 'var(--space-6)',
-          maxWidth: '500px',
+          maxWidth: '560px',
           width: '90%',
           maxHeight: '80vh',
           overflow: 'auto',
@@ -52,130 +43,40 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
           <h3 className="font-h2" style={{ margin: 0, color: 'var(--accent-gold)' }}>
-            {isEditing ? '编辑反思' : `反思详情 - ${reflection.date}`}
+            {isEditing ? 'Edit Reflection' : `Reflection - ${reflection.date}`}
           </h3>
-          <button
-            onClick={onClose}
-            className="font-h2"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-muted)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
-              transition: `color var(--duration-instant) var(--ease-instant)`,
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
-          >
+          <button onClick={onClose} className="font-h2">
             [x]
           </button>
         </div>
 
         {isEditing ? (
           <ReflectionForm
-            key={reflection.id}
-            date={reflection.date}
             existingReflection={reflection}
             onSave={() => {
               setIsEditing(false);
+              onClose();
             }}
           />
         ) : (
-          <div>
-            {template && (
-              <div className="font-caption" style={{ color: 'var(--text-muted)', marginBottom: 'var(--space-3)' }}>
-                模板: {template.name}
-              </div>
-            )}
-
-            {template?.questions.map((q) => (
-              <div key={q.id} style={{ marginBottom: 'var(--space-3)' }}>
-                <div className="font-caption" style={{ color: 'var(--text-secondary)' }}>
-                  {q.label}:
-                </div>
-                <div className="font-body">
-                  {q.type === 'boolean' && reflection.answers[q.id] !== undefined
-                    ? (reflection.answers[q.id] ? '是' : '否')
-                    : reflection.answers[q.id] !== undefined
-                      ? String(reflection.answers[q.id])
-                      : '—'}
-                </div>
-              </div>
-            ))}
-
-            {reflection.linkedObjectiveIds.length > 0 && (
-              <div style={{ marginBottom: 'var(--space-3)' }}>
-                <div className="font-caption" style={{ color: 'var(--text-secondary)' }}>
-                  关联的 O:
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
-                  {reflection.linkedObjectiveIds.map((oid) => {
-                    const obj = objectives.find((o) => o.id === oid);
-                    return (
-                      <span
-                        key={oid}
-                        className="font-body"
-                        style={{
-                          color: 'var(--accent-gold)',
-                          border: '1px solid var(--border-primary)',
-                          padding: 'var(--space-1) var(--space-2)',
-                          display: 'inline-block',
-                        }}
-                      >
-                        {obj ? obj.title : `[未知 O: ${oid}]`}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            <div style={{ marginBottom: 'var(--space-3)' }}>
-              <div className="font-caption" style={{ color: 'var(--text-secondary)' }}>标签:</div>
-              <div style={{ display: 'flex', gap: 'var(--space-1)', flexWrap: 'wrap' }}>
-                {reflection.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-caption"
-                    style={{
-                      backgroundColor: 'var(--bg-tertiary)',
-                      color: 'var(--text-secondary)',
-                      padding: 'var(--space-1) var(--space-2)',
-                      border: '1px solid var(--border-primary)',
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            <div className="font-body" style={{ whiteSpace: 'pre-wrap', color: 'var(--text-primary)' }}>
+              {reflection.content}
             </div>
-
-            <button
-              onClick={() => setIsEditing(true)}
-              className="font-caption"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-mono)',
-                padding: 'var(--space-1) var(--space-2)',
-                marginTop: 'var(--space-2)',
-                textTransform: 'uppercase',
-                transition: `background-color var(--duration-instant) var(--ease-instant), color var(--duration-instant) var(--ease-instant)`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--text-primary)';
-                e.currentTarget.style.color = 'var(--bg-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
-            >
-              [✎ 编辑]
-            </button>
+            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+              <button onClick={() => setIsEditing(true)} className="font-caption">
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  deleteReflection(reflection.id);
+                  onClose();
+                }}
+                className="font-caption"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         )}
       </div>

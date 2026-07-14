@@ -4,7 +4,7 @@ import type { Reflection } from '../../types';
 export interface ReflectionSlice {
   reflections: Reflection[];
   saveReflection: (reflection: Omit<Reflection, 'id' | 'createdAt'>) => void;
-  updateReflection: (id: string, updates: Partial<Reflection>) => void;
+  updateReflection: (id: string, updates: Partial<Pick<Reflection, 'date' | 'content'>>) => void;
   deleteReflection: (id: string) => void;
   getReflectionByDate: (date: string) => Reflection | undefined;
 }
@@ -24,14 +24,15 @@ export const createReflectionSlice: StateCreator<ReflectionSlice> = (set, get) =
             : r
         ),
       });
-    } else {
-      const newReflection: Reflection = {
-        ...reflection,
-        id: generateId(),
-        createdAt: new Date().toISOString(),
-      };
-      set({ reflections: [...get().reflections, newReflection] });
+      return;
     }
+
+    const newReflection: Reflection = {
+      ...reflection,
+      id: generateId(),
+      createdAt: new Date().toISOString(),
+    };
+    set({ reflections: [...get().reflections, newReflection] });
   },
 
   updateReflection: (id, updates) => {
@@ -46,7 +47,5 @@ export const createReflectionSlice: StateCreator<ReflectionSlice> = (set, get) =
     set({ reflections: get().reflections.filter((r) => r.id !== id) });
   },
 
-  getReflectionByDate: (date) => {
-    return get().reflections.find((r) => r.date === date);
-  },
+  getReflectionByDate: (date) => get().reflections.find((r) => r.date === date),
 });

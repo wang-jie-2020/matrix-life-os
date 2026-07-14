@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { format, addDays } from 'date-fns';
 import TaskColumn from './TaskColumn';
 import { useAppStore } from '../../store/useAppStore';
-import { useRef, useEffect } from 'react';
-import { aloCopy } from '../../copy/alo-copy';
-import { format, addDays } from 'date-fns';
 import {
   getWeekStart,
   getWeekDates,
@@ -13,36 +11,26 @@ import {
 } from '../../utils/date';
 
 const DAY_LABELS: Record<string, string> = {
-  MON: '周一',
-  TUE: '周二',
-  WED: '周三',
-  THU: '周四',
-  FRI: '周五',
-  SAT: '周六',
-  SUN: '周日',
+  MON: 'Mon',
+  TUE: 'Tue',
+  WED: 'Wed',
+  THU: 'Thu',
+  FRI: 'Fri',
+  SAT: 'Sat',
+  SUN: 'Sun',
 };
 
 const TaskBoard: React.FC = () => {
-  const { tasks, config } = useAppStore();
-  const [weekStart, setWeekStartState] = useState(() => getWeekStart());
+  const tasks = useAppStore((s) => s.tasks);
+  const config = useAppStore((s) => s.config);
+  const [weekStart, setWeekStart] = useState(() => getWeekStart());
   const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (boardRef.current) {
-      boardRef.current.style.setProperty('--task-column-width', `${config.taskColumnWidth ?? 260}px`);
-    }
+    boardRef.current?.style.setProperty('--task-column-width', `${config.taskColumnWidth ?? 260}px`);
   }, [config.taskColumnWidth]);
 
   const weekDates = getWeekDates(weekStart);
-
-  const getDateTasks = (date: string) => {
-    return tasks.filter((t) => t.date === date);
-  };
-
-  const goToPrevWeek = () => setWeekStartState(getPrevWeekStart(weekStart));
-  const goToNextWeek = () => setWeekStartState(getNextWeekStart(weekStart));
-  const goToCurrentWeek = () => setWeekStartState(getWeekStart());
-
   const isCurrentWeek = weekStart === getWeekStart();
 
   return (
@@ -54,71 +42,21 @@ const TaskBoard: React.FC = () => {
           justifyContent: 'center',
           gap: 'var(--space-4)',
           marginBottom: 'var(--space-3)',
+          flexWrap: 'wrap',
         }}
       >
-        <button
-          onClick={goToPrevWeek}
-          className="font-caption"
-          style={{
-            background: 'none',
-            border: '1px solid var(--border-primary)',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            fontFamily: 'var(--font-mono)',
-            padding: 'var(--space-1) var(--space-3)',
-            transition: 'color var(--duration-instant), border-color var(--duration-instant)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = 'var(--text-primary)';
-            e.currentTarget.style.borderColor = 'var(--border-hover)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'var(--text-secondary)';
-            e.currentTarget.style.borderColor = 'var(--border-primary)';
-          }}
-        >
-          {aloCopy.actions.prevWeek}
+        <button onClick={() => setWeekStart(getPrevWeekStart(weekStart))} className="font-caption">
+          Previous Week
         </button>
         <span className="font-h3" style={{ color: 'var(--accent-gold)' }}>
-          {format(new Date(weekStart), 'yyyy年M月d日')} — {format(addDays(new Date(weekStart), 6), 'M月d日')}
+          {format(new Date(weekStart), 'yyyy-MM-dd')} to {format(addDays(new Date(weekStart), 6), 'yyyy-MM-dd')}
         </span>
-        <button
-          onClick={goToNextWeek}
-          className="font-caption"
-          style={{
-            background: 'none',
-            border: '1px solid var(--border-primary)',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            fontFamily: 'var(--font-mono)',
-            padding: 'var(--space-1) var(--space-3)',
-            transition: 'color var(--duration-instant), border-color var(--duration-instant)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = 'var(--text-primary)';
-            e.currentTarget.style.borderColor = 'var(--border-hover)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'var(--text-secondary)';
-            e.currentTarget.style.borderColor = 'var(--border-primary)';
-          }}
-        >
-          {aloCopy.actions.nextWeek}
+        <button onClick={() => setWeekStart(getNextWeekStart(weekStart))} className="font-caption">
+          Next Week
         </button>
         {!isCurrentWeek && (
-          <button
-            onClick={goToCurrentWeek}
-            className="font-caption"
-            style={{
-              background: 'none',
-              border: '1px solid var(--accent-gold)',
-              color: 'var(--accent-gold)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
-              padding: 'var(--space-1) var(--space-3)',
-            }}
-          >
-            {aloCopy.actions.currentWeek}
+          <button onClick={() => setWeekStart(getWeekStart())} className="font-caption">
+            Current Week
           </button>
         )}
       </div>
@@ -140,10 +78,9 @@ const TaskBoard: React.FC = () => {
               key={date}
               date={date}
               column={dayColumn}
-              tasks={getDateTasks(date)}
+              tasks={tasks.filter((task) => task.date === date)}
               title={DAY_LABELS[dayColumn]}
               dateLabel={format(new Date(date), 'MM/dd')}
-
             />
           );
         })}

@@ -9,123 +9,31 @@ export interface Task {
   date: string;
   status: TaskStatus;
   order: number;
-  abilityId?: string;
-  abilityPoints?: number;
   completedAt?: string;
   migratedFrom?: string;
-  /** 关联的关键结果ID */
-  linkedKrId: string | null;
-  /** 任务来源 */
-  source?: 'manual' | 'inbox' | 'ability' | 'kr';
+  source?: 'manual' | 'capture';
 }
 
-export interface CalendarEvent {
+export interface CaptureNote {
   id: string;
-  date: string;
   content: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
-export interface Principle {
+export interface GoalNote {
   id: string;
   content: string;
-  order: number;
-}
-
-export interface AbilityTask {
-  id: string;
-  content: string;
-  points: number;
-}
-
-export interface Ability {
-  id: string;
-  name: string;
-  currentScore: number;
-  maxScore: number;
-  tasks: AbilityTask[];
-}
-
-export interface ReflectionQuestion {
-  id: string;
-  label: string;
-  type: 'text' | 'number' | 'select' | 'boolean';
-  options?: string[];
-  min?: number;
-  max?: number;
-  required: boolean;
-  abilityLink?: string;
-}
-
-export interface ReflectionTemplate {
-  id: string;
-  name: string;
-  isDefault: boolean;
-  questions: ReflectionQuestion[];
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Reflection {
   id: string;
   date: string;
-  templateId: string;
-  answers: Record<string, string | number | boolean>;
-  tags: string[];
+  content: string;
   createdAt: string;
   updatedAt?: string;
-  /** 关联的 Objective IDs */
-  linkedObjectiveIds: string[];
-}
-
-export interface Inspiration {
-  id: string;
-  content: string;
-  source?: string;
-  tags: string[];
-  createdAt: string;
-  convertedToTaskId?: string;
-}
-
-export interface Entertainment {
-  id: string;
-  content: string;
-  date: string;
-}
-
-export interface KeyResult {
-  id: string;
-  content: string;
-  completed: boolean;
-  scheduled: boolean;
-  linkedTaskId: string | null;
-}
-
-export interface Objective {
-  id: string;
-  title: string;
-  status: 'active' | 'completed';
-  krList: KeyResult[];
-  createdAt: string;
-  completedAt: string | null;
-}
-
-export interface ObjectiveArchive {
-  id: string;
-  objectiveTitle: string;
-  krSnapshot: KeyResult[];
-  completedAt: string;
-  createdAt: string;
-}
-
-export interface InboxItem {
-  id: string;
-  objectiveId?: string;
-  objectiveTitle?: string;
-  content: string;
-  completed: boolean;
-  collectedAt: string;
-  abilityId?: string;
-  abilityPoints?: number;
-  abilityName?: string;
 }
 
 export interface AppConfig {
@@ -135,81 +43,19 @@ export interface AppConfig {
   taskColumnWidth?: number;
 }
 
-// ─── Module System ───
-
-export type GtdPhase =
-  | 'capture'
-  | 'support'
-  | 'execute'
-  | 'insight';
-
-export type ModulePage = 'actionDesk' | 'reviewArchive' | 'system' | 'global';
-
 export type ModuleId =
-  // 核心模块
-  | 'inbox'
+  | 'captureNotes'
   | 'weekBoard'
-  | 'okr'
-  | 'principles'
-  | 'calendar'
-  | 'entertainment'
-  | 'abilities'
-  | 'reflectionLibrary'
-  | 'objectiveArchive'
-  // 可选模块
-  | 'timeBlocks'
-  | 'habits'
-  | 'mood'
-  | 'inspiration';
+  | 'goalNotes'
+  | 'reflections'
+  | 'dataStatus';
 
 export interface ModuleMeta {
   id: ModuleId;
   name: string;
   description: string;
   defaultEnabled: boolean;
-  defaultZone: 'main' | 'side';
-  icon: string;
-  gtdPhase: GtdPhase;
-  page: ModulePage;
   core: boolean;
-}
-
-export interface ModuleConfig {
-  enabledModules: ModuleId[];
-}
-
-export type HabitColor = 'gold' | 'green' | 'blue' | 'red' | 'purple';
-
-export type HabitFrequency = 'daily' | 'weekdays' | 'weekends' | 'weekly';
-
-export interface Habit {
-  id: string;
-  name: string;
-  color: HabitColor;
-  frequency: HabitFrequency;
-  targetDays: number;
-  completions: Record<string, boolean>;
-  createdAt: string;
-}
-
-export interface MoodEntry {
-  id: string;
-  date: string;
-  mood: number;
-  energy: number;
-  note: string;
-  createdAt: string;
-}
-
-export interface TimeBlock {
-  id: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  label: string;
-  taskId?: string;
-  color?: string;
-  completed: boolean;
 }
 
 export interface DashboardLayout {
@@ -224,28 +70,17 @@ export interface TwoColumnLayout {
 
 export interface AppState {
   tasks: Task[];
-  calendarEvents: CalendarEvent[];
-  principles: Principle[];
-  abilities: Ability[];
+  captureNotes: CaptureNote[];
+  goalNotes: GoalNote[];
   reflections: Reflection[];
-  entertainments: Entertainment[];
-  objectives: Objective[];
-  archives: ObjectiveArchive[];
-  inboxItems: InboxItem[];
   config: AppConfig;
   enabledModules: ModuleId[];
-  habits: Habit[];
-  moods: MoodEntry[];
-  timeBlocks: TimeBlock[];
-  inspirations: Inspiration[];
-  reflectionTemplates: ReflectionTemplate[];
   dashboardLayout: DashboardLayout;
   reflectionLayout: TwoColumnLayout;
   systemLayout: TwoColumnLayout;
   __version: string;
 }
 
-// Electron IPC API exposed via contextBridge in preload.cjs
 declare global {
   interface Window {
     electronAPI?: {

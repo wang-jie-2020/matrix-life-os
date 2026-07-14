@@ -3,7 +3,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Task } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
-import { useObjectiveAutoArchive } from '../../hooks/useObjectiveAutoArchive';
 
 interface TaskCardProps {
   task: Task;
@@ -12,88 +11,25 @@ interface TaskCardProps {
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(task.content);
-  const [editAbilityId, setEditAbilityId] = useState<string | undefined>(task.abilityId);
-  const [editAbilityPoints, setEditAbilityPoints] = useState<number | undefined>(task.abilityPoints);
-  const [editAbilityPointsRaw, setEditAbilityPointsRaw] = useState<string>(task.abilityPoints?.toString() ?? '');
-  const { toggleTask, deleteTask, updateTask, incrementScore, abilities, completeKR, uncompleteKR, objectives } = useAppStore();
-  const { tryArchiveObjective } = useObjectiveAutoArchive();
+  const toggleTask = useAppStore((s) => s.toggleTask);
+  const deleteTask = useAppStore((s) => s.deleteTask);
+  const updateTask = useAppStore((s) => s.updateTask);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  });
+
+  const saveEdit = () => {
+    const content = editContent.trim();
+    if (content) updateTask(task.id, { content });
+    setIsEditing(false);
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
-
-  const handleSave = () => {
-    if (editContent.trim()) {
-      const updates: Partial<Task> = { content: editContent.trim() };
-      if (editAbilityId) {
-        updates.abilityId = editAbilityId;
-        updates.abilityPoints = editAbilityPoints && editAbilityPoints > 0 ? editAbilityPoints : 10;
-      } else {
-        updates.abilityId = undefined;
-        updates.abilityPoints = undefined;
-      }
-      updateTask(task.id, updates);
-    }
-    setIsEditing(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleSave();
-    if (e.key === 'Escape') {
-      setEditContent(task.content);
-      setEditAbilityId(task.abilityId);
-      setEditAbilityPoints(task.abilityPoints);
-      setEditAbilityPointsRaw(task.abilityPoints?.toString() ?? '');
-      setIsEditing(false);
-    }
-  };
-
-  const handleToggle = () => {
-    if (task.status === 'active' && task.abilityId && task.abilityPoints) {
-      incrementScore(task.abilityId, task.abilityPoints);
-    }
-
-    // KR linkage: when completing a task linked to a KR, mark KR as completed
-    let linkedObjectiveId: string | null = null;
-    if (task.linkedKrId && task.status === 'active') {
-      for (const obj of objectives) {
-        const kr = obj.krList.find((k) => k.id === task.linkedKrId);
-        if (kr) {
-          completeKR(obj.id, kr.id);
-          linkedObjectiveId = obj.id;
-          break;
-        }
-      }
-    } else if (task.linkedKrId && task.status === 'completed') {
-      for (const obj of objectives) {
-        const kr = obj.krList.find((k) => k.id === task.linkedKrId);
-        if (kr) {
-          uncompleteKR(obj.id, kr.id);
-          break;
-        }
-      }
-    }
-
-    toggleTask(task.id);
-
-    // After toggling, check if the objective should be auto-archived
-    if (linkedObjectiveId) {
-      tryArchiveObjective(linkedObjectiveId);
-    }
-  };
-
-  const ability = abilities.find((a) => a.id === task.abilityId);
 
   return (
     <div
@@ -102,186 +38,90 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
       {...attributes}
       {...listeners}
       className="task-card"
-      onMouseEnter={(e) => {
-        const actions = e.currentTarget.querySelector('.task-actions');
-        if (actions) actions.classList.remove('hidden');
-      }}
-      onMouseLeave={(e) => {
-        const actions = e.currentTarget.querySelector('.task-actions');
-        if (actions) actions.classList.add('hidden');
-      }}
     >
       {isEditing ? (
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}
-          onBlur={(e) => {
-            // Only save if focus leaves the entire editing container
-            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-              handleSave();
+        <input
+          autoFocus
+          value={editContent}
+          onChange={(event) => setEditContent(event.target.value)}
+          onBlur={saveEdit}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') saveEdit();
+            if (event.key === 'Escape') {
+              setEditContent(task.content);
+              setIsEditing(false);
             }
           }}
-        >
-          <input
-            autoFocus
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="font-body"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              borderBottom: '1px solid var(--accent-gold)',
-              color: 'var(--text-primary)',
-              fontFamily: 'var(--font-mono)',
-              padding: '0 var(--space-1)',
-              width: '100%',
-              outline: 'none',
-              caretColor: 'var(--accent-gold)',
-            }}
-          />
-          <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
-            <select
-              value={editAbilityId || ''}
-              onChange={(e) => setEditAbilityId(e.target.value || undefined)}
-              onKeyDown={handleKeyDown}
-              className="font-caption"
-              style={{
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-primary)',
-                color: 'var(--text-primary)',
-                fontFamily: 'var(--font-mono)',
-                padding: '2px var(--space-1)',
-                outline: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              <option value="">-- 无 --</option>
-              {abilities.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-            {editAbilityId && (
-              <input
-                type="number"
-                step="0.1"
-                min={0.1}
-                max={100}
-                value={editAbilityPointsRaw}
-                onChange={(e) => {
-                  const raw = e.target.value;
-                  setEditAbilityPointsRaw(raw);
-                  const parsed = raw ? parseFloat(raw) : undefined;
-                  setEditAbilityPoints(parsed);
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="分值"
-                className="font-caption"
-                style={{
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-primary)',
-                  color: 'var(--text-primary)',
-                  fontFamily: 'var(--font-mono)',
-                  padding: '2px var(--space-1)',
-                  width: '60px',
-                  outline: 'none',
-                }}
-              />
-            )}
-          </div>
-        </div>
+          className="font-body"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            borderBottom: '1px solid var(--accent-gold)',
+            color: 'var(--text-primary)',
+            fontFamily: 'var(--font-mono)',
+            padding: '0 var(--space-1)',
+            width: '100%',
+            outline: 'none',
+            caretColor: 'var(--accent-gold)',
+          }}
+        />
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <button
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              toggleTask(task.id);
+            }}
+            className="font-caption"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: task.status === 'completed' ? 'var(--accent-success)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-mono)',
+              padding: 0,
+            }}
+          >
+            {task.status === 'completed' ? '[x]' : '[ ]'}
+          </button>
           <span
-            onClick={handleToggle}
             className="font-body"
             style={{
-              cursor: 'pointer',
-              textDecoration: task.status === 'completed' ? 'line-through' : 'none',
-              color: task.status === 'completed' ? 'var(--text-secondary)' : 'var(--text-primary)',
               flex: 1,
+              color: task.status === 'completed' ? 'var(--text-secondary)' : 'var(--text-primary)',
+              textDecoration: task.status === 'completed' ? 'line-through' : 'none',
               lineHeight: '28px',
             }}
           >
-            {task.status === 'completed' ? (
-              <span style={{ color: 'var(--accent-success)' }}>☑</span>
-            ) : (
-              <span style={{ color: 'var(--text-muted)' }}>☐</span>
-            )}{' '}
             {task.content}
-            {ability && task.abilityPoints && (
-              <span className="font-caption" style={{ color: 'var(--accent-gold)', marginLeft: 'var(--space-2)' }}>
-                [{ability.name} +{task.abilityPoints}]
-              </span>
-            )}
-            {task.migratedFrom && (
-              <span className="font-caption" style={{ color: 'var(--accent-gold)', marginLeft: 'var(--space-2)' }}>
-                ⤴ 来自昨日
-              </span>
-            )}
-            {task.source === 'kr' && (
-              <span className="font-caption" style={{ color: 'var(--accent-gold)', marginLeft: 'var(--space-2)' }}>
-                [KR]
-              </span>
-            )}
           </span>
-          <span className="task-actions hidden" style={{ display: 'flex', gap: 'var(--space-1)' }}>
-            <button
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditContent(task.content);
-                setEditAbilityId(task.abilityId);
-                setEditAbilityPoints(task.abilityPoints);
-                setEditAbilityPointsRaw(task.abilityPoints?.toString() ?? '');
-                setIsEditing(true);
-              }}
-              className="font-caption"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-mono)',
-                padding: '0 var(--space-1)',
-                transition: `color var(--duration-instant) var(--ease-instant)`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
-            >
-              [✎]
-            </button>
-            <button
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteTask(task.id);
-              }}
-              className="font-caption"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--accent-danger)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-mono)',
-                padding: '0 var(--space-1)',
-                transition: `color var(--duration-instant) var(--ease-instant)`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--accent-danger)';
-              }}
-            >
-              [x]
-            </button>
-          </span>
+          {task.migratedFrom && (
+            <span className="font-caption" style={{ color: 'var(--accent-gold)' }}>
+              moved
+            </span>
+          )}
+          <button
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              setEditContent(task.content);
+              setIsEditing(true);
+            }}
+            className="font-caption"
+          >
+            Edit
+          </button>
+          <button
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              deleteTask(task.id);
+            }}
+            className="font-caption"
+          >
+            Delete
+          </button>
         </div>
       )}
       <style>{`
@@ -300,9 +140,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         }
         .task-card:active {
           cursor: grabbing;
-        }
-        .hidden {
-          display: none !important;
         }
       `}</style>
     </div>

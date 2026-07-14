@@ -11,18 +11,18 @@ export interface LayoutSlice {
 }
 
 export const DEFAULT_DASHBOARD_LAYOUT: DashboardLayout = {
-  main: ['timeBlocks', 'habits'],
-  side: ['principles', 'calendar', 'entertainment', 'mood', 'inspiration'],
+  main: ['captureNotes', 'weekBoard', 'goalNotes'],
+  side: [],
 };
 
 export const DEFAULT_REFLECTION_LAYOUT: TwoColumnLayout = {
-  left: ['reflectionLibrary'],
-  right: ['abilityReader', 'abilityTraining'],
+  left: ['reflectionForm'],
+  right: ['reflectionList'],
 };
 
 export const DEFAULT_SYSTEM_LAYOUT: TwoColumnLayout = {
-  left: ['moduleManager'],
-  right: ['aboutBox', 'monkQuote', 'reflectionTemplateManager', 'dataHealthPanel', 'updatePanel', 'manualPanel'],
+  left: ['moduleManager', 'dataStatus'],
+  right: ['version', 'help'],
 };
 
 export const createLayoutSlice: StateCreator<LayoutSlice> = (set) => ({

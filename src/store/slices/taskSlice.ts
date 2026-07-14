@@ -4,7 +4,7 @@ import { getDayColumnFromDate } from '../../utils/date';
 
 export interface TaskSlice {
   tasks: Task[];
-  addTask: (content: string, date: string, abilityId?: string, abilityPoints?: number, source?: Task['source'], linkedKrId?: string | null) => string;
+  addTask: (content: string, date: string, source?: Task['source']) => string;
   deleteTask: (id: string) => void;
   moveTask: (id: string, targetDate: string, newOrder: number) => void;
   toggleTask: (id: string) => void;
@@ -20,7 +20,7 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 export const createTaskSlice: StateCreator<TaskSlice> = (set, get) => ({
   tasks: [],
 
-  addTask: (content, date, abilityId, abilityPoints, source, linkedKrId) => {
+  addTask: (content, date, source) => {
     const tasks = get().tasks;
     const column = getDayColumnFromDate(new Date(date));
     const columnTasks = tasks.filter((t) => t.date === date);
@@ -32,10 +32,7 @@ export const createTaskSlice: StateCreator<TaskSlice> = (set, get) => ({
       date,
       status: 'active',
       order: columnTasks.length,
-      abilityId,
-      abilityPoints,
       source: source || 'manual',
-      linkedKrId: linkedKrId ?? null,
     };
     set({ tasks: [...tasks, newTask] });
     return id;
