@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+> Reset note: entries below describe pre-reset historical releases. They are not current product requirements. Use `docs/project-requirements.md` for the current scope and `docs/remediation-plan.md` for cleanup decisions.
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]

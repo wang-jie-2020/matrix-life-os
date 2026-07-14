@@ -1,9 +1,19 @@
-# Matrix Life OS 文档
+# Matrix Life OS Documentation
 
-这里保存当前项目文档。
+This directory holds the current project documentation.
 
-## 文档
+## Read First
 
-- [Project Requirements](project-requirements.md): 项目需求说明。该文档不描述实现细节。
-- [Implementation Review](implementation-review.md): 当前实现相对项目需求的审查。
-- [Remediation Plan](remediation-plan.md): 实现整改项草案和建议顺序。
+- [Project Requirements](project-requirements.md): The canonical product requirements. This document does not describe implementation details.
+- [Implementation Review](implementation-review.md): A review of the current implementation against the requirements.
+- [Remediation Plan](remediation-plan.md): The draft cleanup plan and proposed work order.
+
+## Agent Support
+
+- [Issue Tracker](agents/issue-tracker.md): How agent skills should use this repo's issue tracker.
+- [Triage Labels](agents/triage-labels.md): Label vocabulary for triage-oriented skills.
+- [Domain Docs](agents/domain.md): How agent skills should consume domain documentation.
+
+## Historical Notes
+
+The root-level `CHANGELOG.md` and `RELEASE_NOTES.md` describe older pre-reset releases. They are historical records, not current product requirements.

@@ -15,7 +15,7 @@ A task view that shows the seven days of one week in the same view. Each task be
 A loose note the user records when it is not yet a dated task. A capture note can be created, viewed, edited, and deleted.
 
 **Goal Note**:
-A note for a goal or OKR-like item. A goal note can be created, viewed, edited, and deleted.
+A note that records a goal. A goal note can be created, viewed, edited, and deleted. It does not contain key results, task links, progress scoring, or completion status.
 
 **Reflection**:
 A dated review record. A reflection can be created, viewed, edited, deleted, and assigned to a day.

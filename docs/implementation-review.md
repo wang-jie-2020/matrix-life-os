@@ -95,7 +95,7 @@
 
 - 反思 CRUD 中 delete 不完整。
 - 反思被模板、标签、目标关联扩展，超出当前需求。
-- 目前不需要删除这些内部字段，但产品表面应先满足基本 CRUD，并弱化不要求的联动。
+- 后续整改应满足基本 CRUD，并清除不属于正式需求的联动。
 
 ## Partial Match
 
@@ -118,7 +118,7 @@
 - `src/features/tasks/TaskCard.tsx:62` 到 `src/features/tasks/TaskCard.tsx:94` 把任务完成和能力分、KR 完成、目标归档联动。
 - `src/features/tasks/TaskColumn.tsx:141` 到 `src/features/tasks/TaskColumn.tsx:186` 在新增任务时暴露能力关联和分值。
 
-结论：任务板可以作为第一批保留对象，但应切断或隐藏不属于正式需求的能力/KR联动。
+结论：任务板可以作为第一批保留对象，但应清除不属于正式需求的能力/KR联动。
 
 ### System Area 有基础，但内容不干净
 
@@ -160,7 +160,7 @@
 
 ## Scope Creep
 
-以下实现不是当前正式需求，后续应分类处理：隐藏、删除、保留为实验模块，或另写正式需求。
+以下实现不是当前正式需求，后续应从源码中清除，除非先另写正式需求。
 
 - 原则：`src/pages/ActionDesk.tsx:18`、`src/features/modules/moduleRegistry.ts:40` 到 `src/features/modules/moduleRegistry.ts:50`。
 - 能力分：`src/types/index.ts:35` 到 `src/types/index.ts:47`，并且任务创建/完成会使用。
@@ -174,7 +174,7 @@
 - 反思模板管理：`src/pages/System.tsx:124` 到 `src/pages/System.tsx:128`。
 - 退出前 last words 浮层：`src/App.tsx:52` 到 `src/App.tsx:68`、`src/App.tsx:280` 到 `src/App.tsx:303`。
 
-这些内容不一定都要立刻删除，但不能再被视为当前产品范围的核心部分。
+这些内容应在后续整改中删除，不能再作为隐藏功能、实验模块或当前产品范围的核心部分保留。
 
 ## User-Facing Copy Note
 
@@ -192,8 +192,8 @@
 
 1. 移除更新检查，只保留版本显示。
 2. 移除备份、导出、导入、恢复相关 UI 文案和入口。
-3. 把 Quick Inbox 对齐为 Capture Note：补编辑，去掉或隐藏转换流转。
-4. 把 OKRPanel 对齐为 Goal Note：先隐藏 KR、完成状态、任务链接、归档行为。
+3. 把 Quick Inbox 对齐为 Capture Note：补编辑，去掉转换流转。
+4. 把 OKRPanel 对齐为 Goal Note：清除 KR、完成状态、任务链接、归档行为。
 5. 补 Reflection 删除入口。
 6. 调整 Module Registry：当前正式核心只应对应任务、捕获、目标、反思、System 必要能力。
 7. 调整 DataHealthPanel：只说明当前核心数据、本地存储位置、保存状态。

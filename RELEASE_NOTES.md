@@ -1,5 +1,7 @@
 # ASCII Life OS v0.3.0 发布说明
 
+> Reset note: this file is a historical pre-reset release note. It is not a current product requirement. Use `docs/project-requirements.md` for the current Matrix Life OS scope and `docs/remediation-plan.md` for cleanup decisions.
+
 > **「你的人生，值得一款操作系统。」**
 >
 > 这一版不是加功能，是把骨架重新接了一遍。
