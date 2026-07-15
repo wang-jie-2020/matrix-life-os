@@ -1,31 +1,32 @@
-# Agent Instructions
+# Agent 指令
 
-## Current project scope
+## 当前产品范围
 
-Before product, triage, or implementation work, read:
+在进行产品、分诊或实现工作之前，先阅读：
 
 - `docs/README.md`
-- `docs/project-requirements.md`
+- `docs/PRD.md`
+- `docs/ARCHITECTURE.md`
 - `CONTEXT.md`
 
-Treat `docs/project-requirements.md` as the canonical product scope. `CHANGELOG.md` and `RELEASE_NOTES.md` are historical pre-reset records, not current requirements.
+将 `docs/PRD.md` 视为标准产品范围。`CHANGELOG.md` 和 `RELEASE_NOTES.md` 是 reset 前的历史记录，不是当前需求。
 
-Current cleanup decisions:
+当前范围规则：
 
-- Matrix Life OS is scoped to Task, Capture Note, Goal Note, Reflection, System Area, and local data status.
-- Manual backup, export, import, and recovery are not current product requirements.
-- Old modules should be removed from source, not kept as hidden or experimental modules.
+- Matrix Life OS 的范围是 Task、Capture Note、Goal Note、Reflection、System Area 和本地数据状态。
+- 手动备份、导出、导入和恢复不是当前产品需求。
+- 隐藏或实验性产品模块不属于当前产品范围。
 
-## Agent skills
+## Agent 技能
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues for this repo. See `docs/agents/issue-tracker.md`.
+本仓库使用 GitHub Issues 跟踪议题。见 `docs/agents/issue-tracker.md`。
 
-### Triage labels
+### 分诊标签
 
-Triage uses the default five-label vocabulary. See `docs/agents/triage-labels.md`.
+分诊使用默认的五标签词汇。见 `docs/agents/triage-labels.md`。
 
-### Domain docs
+### 领域文档
 
-Domain docs use a single-context layout. See `docs/agents/domain.md`.
+领域文档使用单上下文布局。见 `docs/agents/domain.md`。

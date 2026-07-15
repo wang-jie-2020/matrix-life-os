@@ -1,82 +1,82 @@
 # Matrix Life OS
 
-A local-first personal management desktop app built with React, TypeScript, Zustand, Vite, and Electron.
+Matrix Life OS 是一个本地优先的个人管理桌面应用，使用 React、TypeScript、Zustand、Vite 和 Electron 构建。
 
-## Current Product Scope
+## 当前产品范围
 
-The canonical product scope is [docs/project-requirements.md](docs/project-requirements.md).
+标准产品范围见 [docs/PRD.md](docs/PRD.md)。
 
-Matrix Life OS supports four core records:
+Matrix Life OS 支持四类核心记录：
 
 - Task
 - Capture Note
 - Goal Note
 - Reflection
 
-The app has three top-level areas:
+应用有三个顶层区域：
 
-- **Action**: Capture Notes, Weekly Task Board, and Goal Notes.
-- **Review**: create and view dated Reflections.
-- **System**: feature visibility, local data status, version, and short help.
+- **Action**：Capture Notes、Weekly Task Board 和 Goal Notes。
+- **Review**：创建和查看带日期的 Reflections。
+- **System**：功能显示控制、本地数据状态、版本信息和简短帮助。
 
-Core use is local-first and does not require an account, cloud sync, collaboration, or network access.
+核心使用是本地优先的，不需要账号、云同步、协作或网络访问。
 
-## Storage
+## 存储
 
-App state is persisted with Zustand persist.
+应用状态通过 Zustand persist 持久化。
 
-Electron runtime:
+Electron 运行时：
 
-- Data file: `app.getPath('userData')/alo-data.json`
-- Temporary write file: `alo-data.json.tmp`
+- 数据文件：`app.getPath('userData')/alo-data.json`
+- 临时写入文件：`alo-data.json.tmp`
 
-Browser or Vite dev fallback:
+浏览器或 Vite 开发回退：
 
 - `localStorage`
-- Persist key: `alo-storage`
+- 持久化键：`alo-storage`
 
-## Development
+## 开发
 
-Install dependencies:
+安装依赖：
 
 ```bash
 npm install
 ```
 
-Start the Vite dev server:
+启动 Vite 开发服务器：
 
 ```bash
 npm run dev
 ```
 
-Build the frontend:
+构建前端：
 
 ```bash
 npm run build
 ```
 
-Run lint:
+运行 lint：
 
 ```bash
 npm run lint
 ```
 
-Package the Electron app:
+打包 Electron 应用：
 
 ```bash
 npm run electron:build
 ```
 
-There is currently no dedicated `test` script in `package.json`.
+`package.json` 目前没有专用的 `test` 脚本。
 
-## Documentation
+## 文档
 
-The rebuilt project documentation lives in [docs/](docs/README.md):
+重整后的项目文档位于 [docs/](docs/README.md)：
 
-- [Project Requirements](docs/project-requirements.md)
-- [Implementation Review](docs/implementation-review.md)
-- [Remediation Plan](docs/remediation-plan.md)
+- [PRD](docs/PRD.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [术语表](CONTEXT.md)
 
-## License
+## 许可证
 
-MIT. See [LICENSE](LICENSE).
+MIT。见 [LICENSE](LICENSE)。

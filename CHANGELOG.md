@@ -1,12 +1,12 @@
-# Changelog
+# 变更日志
 
-All notable changes to this project will be documented in this file.
+本文档记录本项目的重要变更。
 
-> Reset note: entries below describe pre-reset historical releases. They are not current product requirements. Use `docs/project-requirements.md` for the current scope and `docs/remediation-plan.md` for cleanup decisions.
+> Reset 说明：以下条目描述 reset 前的历史版本，不是当前产品需求。当前范围以 `docs/PRD.md` 为准；当前实现说明见 `docs/ARCHITECTURE.md`。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)。
 
-## [Unreleased]
+## [未发布]
 
 ## [0.3.0] - 2026-06-05
 

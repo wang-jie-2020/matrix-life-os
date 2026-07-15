@@ -1,3 +1,3 @@
-# Claude Instructions
+# Claude 指令
 
-Use `AGENTS.md` as the canonical agent instruction file for this repo.
+本仓库以 `AGENTS.md` 作为标准 agent 指令文件。

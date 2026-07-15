@@ -1,34 +1,34 @@
-# Domain Docs
+# 领域文档
 
-How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+工程技能在探索代码库时，应按本文档读取本仓库的领域文档。
 
-## Before exploring, read these
+## 探索前先读
 
-- `CONTEXT.md` at the repo root.
-- `docs/adr/` for ADRs that touch the area being worked on.
+- 仓库根目录的 `CONTEXT.md`。
+- 与当前工作区域相关的 `docs/adr/`。
 
-If these files do not exist, proceed silently. Do not flag their absence or suggest creating them upfront. Domain modeling skills can create them lazily when terms or decisions are resolved.
+如果这些文件不存在，静默继续。不要因为缺失而报告问题，也不要预先建议创建它们。领域建模技能可以在术语或决策明确时按需创建。
 
-## Layout
+## 布局
 
-This repo uses a single-context layout:
+本仓库使用单上下文布局：
 
 ```text
 /
-├── CONTEXT.md
-├── docs/
-│   └── adr/
-│       ├── 0001-example-decision.md
-│       └── 0002-another-decision.md
-└── src/
+|-- CONTEXT.md
+|-- docs/
+|   `-- adr/
+|       |-- 0001-example-decision.md
+|       `-- 0002-another-decision.md
+`-- src/
 ```
 
-## Use the glossary's vocabulary
+## 使用术语表词汇
 
-When output names a domain concept, use the term as defined in `CONTEXT.md`. Do not drift to synonyms the glossary explicitly avoids.
+当输出中提到领域概念时，使用 `CONTEXT.md` 中定义的术语。不要漂移到术语表明确避免的同义词。
 
-If the concept is not in the glossary yet, either reconsider the language or note the gap for future domain modeling.
+如果概念还没有进入术语表，要么重新考虑措辞，要么记录为后续领域建模的缺口。
 
-## Flag ADR conflicts
+## 标出 ADR 冲突
 
-If output contradicts an existing ADR, surface the conflict explicitly rather than silently overriding it.
+如果输出与已有 ADR 冲突，明确指出冲突，不要静默覆盖。

@@ -1,21 +1,37 @@
 # Matrix Life OS
 
-## Language
+Matrix Life OS 的产品上下文：一个本地优先的个人管理工具，围绕带日期的任务、松散记录、目标记录、反思和本地数据状态展开。
 
-**Matrix Life OS**:
-The product and repository name.
+## 语言
 
-**Task**:
-A concrete thing the user plans to do on a specific day. A task is created under one day on the weekly task board. It can be viewed, edited, deleted, completed, uncompleted, moved between days, and reordered within a day.
+**Matrix Life OS**：
+产品和仓库名称。
 
-**Weekly Task Board**:
-A task view that shows the seven days of one week in the same view. Each task belongs to one day on the board. It opens on the current week and can switch to previous or next weeks.
+**Task**：
+用户计划在某一天完成的一件具体事情。Task 在 Weekly Task Board 的某一天下面创建；它可以被查看、编辑、删除、完成、取消完成、跨日移动，并在同一天内重排。
 
-**Capture Note**:
-A loose note the user records when it is not yet a dated task. A capture note can be created, viewed, edited, and deleted.
+**Weekly Task Board**：
+同时展示一周七天的任务视图。每个 Task 都属于板上的某一天。它默认打开当前周，并可以切换到上一周或下一周。
 
-**Goal Note**:
-A note that records a goal. A goal note can be created, viewed, edited, and deleted. It does not contain key results, task links, progress scoring, or completion status.
+**Action Area**：
+用户管理 Capture Notes、Weekly Task Board 和 Goal Notes 的产品区域。
+_避免使用_：Action Desk
 
-**Reflection**:
-A dated review record. A reflection can be created, viewed, edited, deleted, and assigned to a day.
+**Capture Note**：
+用户记录的松散内容，用于还不属于 dated task 的事项。Capture Note 可以被创建、查看、编辑和删除。
+
+**Goal Note**：
+记录目标的简单文本记录。Goal Note 可以被创建、查看、编辑和删除。它不包含 key results、task links、progress scoring 或 completion status。
+
+**Reflection**：
+带日期的回顾记录。Reflection 可以被创建、查看、编辑、删除，并分配到某一天。
+
+**Review Area**：
+用户创建和查看 Reflections 的产品区域。
+_避免使用_：Review Archive
+
+**System Area**：
+用户管理功能显示、阅读本地数据状态、查看版本信息和阅读简短帮助的产品区域。
+
+**Local Data Status**：
+用户可读的数据状态摘要，说明核心记录是否本地保存、保存了哪些记录类型，以及保存是否可用。
