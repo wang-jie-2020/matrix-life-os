@@ -4,8 +4,11 @@ import ModuleManager from '../features/modules/ModuleManager';
 import DataHealthPanel from '../features/system/DataHealthPanel';
 import VersionPanel from '../features/system/VersionPanel';
 import ManualPanel from '../features/system/ManualPanel';
+import { useTranslation } from '../i18n/react';
 
 const System: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <div
       style={{
@@ -16,7 +19,7 @@ const System: React.FC = () => {
         margin: '0 auto',
       }}
     >
-      <AsciiBox title="Feature Visibility">
+      <AsciiBox title={t('system.featureVisibility')}>
         <ModuleManager />
       </AsciiBox>
       <VersionPanel />

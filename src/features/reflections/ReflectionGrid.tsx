@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Reflection } from '../../types';
 
@@ -8,12 +9,13 @@ interface ReflectionGridProps {
 
 const ReflectionGrid: React.FC<ReflectionGridProps> = ({ onViewDetail }) => {
   const reflections = useAppStore((s) => s.reflections);
+  const { t } = useTranslation();
   const sorted = [...reflections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   if (sorted.length === 0) {
     return (
       <div className="font-caption" style={{ color: 'var(--text-muted)' }}>
-        No reflections yet.
+        {t('reflection.empty')}
       </div>
     );
   }

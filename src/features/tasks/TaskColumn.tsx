@@ -3,6 +3,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useDroppable } from '@dnd-kit/core';
 import type { DayColumn, Task } from '../../types';
 import TaskCard from './TaskCard';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 import AsciiButton from '../../components/AsciiButton';
 
@@ -18,6 +19,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
   const [isAdding, setIsAdding] = useState(false);
   const [newContent, setNewContent] = useState('');
   const addTask = useAppStore((s) => s.addTask);
+  const { t } = useTranslation();
 
   const today = new Date().toISOString().split('T')[0];
   const isToday = date === today;
@@ -73,7 +75,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
         )}
         {isToday && (
           <div className="font-caption" style={{ color: 'var(--accent-gold)', marginTop: 'var(--space-1)' }}>
-            TODAY
+            {t('tasks.today')}
           </div>
         )}
       </div>
@@ -113,7 +115,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
               onBlur={() => {
                 if (!newContent.trim()) setIsAdding(false);
               }}
-              placeholder="Add a task..."
+              placeholder={t('tasks.placeholder')}
               className="font-body"
               style={{
                 background: 'transparent',
@@ -131,8 +133,8 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
               onPointerDown={(event) => event.preventDefault()}
               onClick={handleAdd}
               frame="tight"
-              title="Add task"
-              ariaLabel="Add task"
+              title={t('tasks.add')}
+              ariaLabel={t('tasks.add')}
               style={{
                 border: '1px solid var(--accent-gold)',
                 color: 'var(--accent-gold)',
@@ -145,8 +147,8 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
           <AsciiButton
             onClick={() => setIsAdding(true)}
             frame="tight"
-            title="Add task"
-            ariaLabel="Add task"
+            title={t('tasks.add')}
+            ariaLabel={t('tasks.add')}
             style={{
               color: 'var(--text-muted)',
               width: '100%',

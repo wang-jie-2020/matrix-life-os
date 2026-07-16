@@ -4,7 +4,7 @@ import { createTaskSlice, type TaskSlice } from './slices/taskSlice';
 import { createCaptureNoteSlice, type CaptureNoteSlice } from './slices/captureNoteSlice';
 import { createGoalNoteSlice, type GoalNoteSlice } from './slices/goalNoteSlice';
 import { createReflectionSlice, type ReflectionSlice } from './slices/reflectionSlice';
-import { createConfigSlice, type ConfigSlice } from './slices/configSlice';
+import { createConfigSlice, normalizeConfig, type ConfigSlice } from './slices/configSlice';
 import { createModuleSlice, type ModuleSlice } from './slices/moduleSlice';
 import {
   createLayoutSlice,
@@ -83,12 +83,7 @@ export const useAppStore = create<AppStore>()(
         state.captureNotes = state.captureNotes || [];
         state.goalNotes = state.goalNotes || [];
         state.reflections = state.reflections || [];
-        state.config = state.config || {
-          currentWeekStart: new Date().toISOString().split('T')[0],
-          lastVisitDate: new Date().toISOString().split('T')[0],
-          theme: 'dark',
-          taskColumnWidth: 260,
-        };
+        state.config = normalizeConfig(state.config);
         state.enabledModules = state.enabledModules || [];
         state.dashboardLayout = DEFAULT_DASHBOARD_LAYOUT;
         state.reflectionLayout = DEFAULT_REFLECTION_LAYOUT;

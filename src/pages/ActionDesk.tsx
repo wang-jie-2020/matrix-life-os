@@ -11,6 +11,7 @@ import { arrayMove } from '@dnd-kit/sortable';
 import CaptureNotesPanel from '../features/capture/CaptureNotesPanel';
 import GoalNotesPanel from '../features/goals/GoalNotesPanel';
 import TaskBoard from '../features/tasks/TaskBoard';
+import { useTranslation } from '../i18n/react';
 import { useAppStore } from '../store/useAppStore';
 
 const ActionDesk: React.FC = () => {
@@ -21,6 +22,7 @@ const ActionDesk: React.FC = () => {
   const showCaptureNotes = isModuleEnabled('captureNotes');
   const showWeekBoard = isModuleEnabled('weekBoard');
   const showGoalNotes = isModuleEnabled('goalNotes');
+  const { t } = useTranslation();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -74,7 +76,7 @@ const ActionDesk: React.FC = () => {
       {showGoalNotes && <GoalNotesPanel />}
       {!showCaptureNotes && !showWeekBoard && !showGoalNotes && (
         <div className="font-body" style={{ color: 'var(--text-secondary)' }}>
-          Action features are hidden. Open System to show them again.
+          {t('action.hidden')}
         </div>
       )}
     </div>

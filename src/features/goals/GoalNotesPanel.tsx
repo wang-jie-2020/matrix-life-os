@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AsciiBox from '../../components/AsciiBox';
 import AsciiButton from '../../components/AsciiButton';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 
 const GoalNotesPanel: React.FC = () => {
@@ -11,6 +12,7 @@ const GoalNotesPanel: React.FC = () => {
   const [draft, setDraft] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState('');
+  const { t } = useTranslation();
 
   const addNote = () => {
     const content = draft.trim();
@@ -28,7 +30,7 @@ const GoalNotesPanel: React.FC = () => {
   };
 
   return (
-    <AsciiBox title="Goal Notes">
+    <AsciiBox title={t('goals.title')}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
         <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
           <input
@@ -37,7 +39,7 @@ const GoalNotesPanel: React.FC = () => {
             onKeyDown={(event) => {
               if (event.key === 'Enter') addNote();
             }}
-            placeholder="Write a goal note"
+            placeholder={t('goals.placeholder')}
             className="font-body"
             style={{
               flex: 1,
@@ -50,14 +52,14 @@ const GoalNotesPanel: React.FC = () => {
               padding: 'var(--space-2) 0',
             }}
           />
-          <AsciiButton onClick={addNote} frame="tight" title="Add goal note" ariaLabel="Add goal note">
+          <AsciiButton onClick={addNote} frame="tight" title={t('goals.add')} ariaLabel={t('goals.add')}>
             +
           </AsciiButton>
         </div>
 
         {goalNotes.length === 0 ? (
           <div className="font-caption" style={{ color: 'var(--text-muted)' }}>
-            No goal notes yet.
+            {t('goals.empty')}
           </div>
         ) : (
           goalNotes.map((note) => (
@@ -103,8 +105,8 @@ const GoalNotesPanel: React.FC = () => {
                   setEditingContent(note.content);
                 }}
                 frame="tight"
-                title="Edit goal note"
-                ariaLabel="Edit goal note"
+                title={t('goals.edit')}
+                ariaLabel={t('goals.edit')}
               >
                 ✎
               </AsciiButton>
@@ -112,8 +114,8 @@ const GoalNotesPanel: React.FC = () => {
                 onClick={() => deleteGoalNote(note.id)}
                 variant="danger"
                 frame="tight"
-                title="Delete goal note"
-                ariaLabel="Delete goal note"
+                title={t('goals.delete')}
+                ariaLabel={t('goals.delete')}
               >
                 x
               </AsciiButton>

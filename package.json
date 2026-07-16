@@ -11,6 +11,7 @@
     "build": "tsc -b && vite build",
     "audit:contrast": "node scripts/audit-contrast.mjs",
     "lint": "eslint .",
+    "test": "node --import ./tests/register-ts-loader.mjs --test tests/*.test.ts",
     "preview": "vite preview",
     "electron:build": "npm run build && electron-builder"
   },

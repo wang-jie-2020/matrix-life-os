@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Task } from '../../types';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 import AsciiButton from '../../components/AsciiButton';
 
@@ -15,6 +16,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const toggleTask = useAppStore((s) => s.toggleTask);
   const deleteTask = useAppStore((s) => s.deleteTask);
   const updateTask = useAppStore((s) => s.updateTask);
+  const { t } = useTranslation();
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
@@ -75,6 +77,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               toggleTask(task.id);
             }}
             className="font-caption"
+            title={t('tasks.toggleComplete')}
+            aria-label={t('tasks.toggleComplete')}
             style={{
               background: 'none',
               border: 'none',
@@ -99,7 +103,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           </span>
           {task.migratedFrom && (
             <span className="font-caption" style={{ color: 'var(--accent-gold)' }}>
-              [MOVED]
+              {t('tasks.moved')}
             </span>
           )}
           <AsciiButton
@@ -110,8 +114,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               setIsEditing(true);
             }}
             frame="tight"
-            title="Edit task"
-            ariaLabel="Edit task"
+            title={t('tasks.edit')}
+            ariaLabel={t('tasks.edit')}
           >
             ✎
           </AsciiButton>
@@ -123,8 +127,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             }}
             variant="danger"
             frame="tight"
-            title="Delete task"
-            ariaLabel="Delete task"
+            title={t('tasks.delete')}
+            ariaLabel={t('tasks.delete')}
           >
             x
           </AsciiButton>

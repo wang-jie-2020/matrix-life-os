@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { Reflection } from '../../types';
 import ReflectionForm from './ReflectionForm';
+import { interpolate } from '../../i18n';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 import AsciiButton from '../../components/AsciiButton';
 
@@ -12,6 +14,7 @@ interface ReflectionDetailModalProps {
 const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflection, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const deleteReflection = useAppStore((s) => s.deleteReflection);
+  const { t } = useTranslation();
 
   if (!reflection) return null;
 
@@ -44,9 +47,9 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflectio
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
           <h3 className="font-h2" style={{ margin: 0, color: 'var(--accent-gold)' }}>
-            {isEditing ? 'Edit Reflection' : `Reflection - ${reflection.date}`}
+            {isEditing ? t('reflection.editTitle') : interpolate(t('reflection.detailTitle'), { date: reflection.date })}
           </h3>
-          <AsciiButton onClick={onClose} className="font-h2" frame="tight" title="Close" ariaLabel="Close">
+          <AsciiButton onClick={onClose} className="font-h2" frame="tight" title={t('reflection.close')} ariaLabel={t('reflection.close')}>
             x
           </AsciiButton>
         </div>
@@ -68,8 +71,8 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflectio
               <AsciiButton
                 onClick={() => setIsEditing(true)}
                 frame="tight"
-                title="Edit reflection"
-                ariaLabel="Edit reflection"
+                title={t('reflection.edit')}
+                ariaLabel={t('reflection.edit')}
               >
                 ✎
               </AsciiButton>
@@ -80,8 +83,8 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflectio
                 }}
                 variant="danger"
                 frame="tight"
-                title="Delete reflection"
-                ariaLabel="Delete reflection"
+                title={t('reflection.delete')}
+                ariaLabel={t('reflection.delete')}
               >
                 x
               </AsciiButton>

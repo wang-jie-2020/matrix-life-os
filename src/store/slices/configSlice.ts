@@ -1,9 +1,11 @@
 import type { StateCreator } from 'zustand';
-import type { AppConfig } from '../../types';
+import type { AppConfig, InterfaceLanguage } from '../../types';
+import { detectInterfaceLanguage } from '../../i18n';
 
 export interface ConfigSlice {
   config: AppConfig;
   updateConfig: (config: Partial<AppConfig>) => void;
+  setInterfaceLanguage: (language: InterfaceLanguage) => void;
   toggleTheme: () => void;
 }
 
@@ -17,16 +19,42 @@ const getWeekStart = () => {
   return monday.toISOString().split('T')[0];
 };
 
+const getBrowserLanguages = () => {
+  if (typeof navigator === 'undefined') return [];
+  if (navigator.languages?.length) return [...navigator.languages];
+  return navigator.language ? [navigator.language] : [];
+};
+
+export const createDefaultConfig = (languages = getBrowserLanguages()): AppConfig => ({
+  currentWeekStart: getWeekStart(),
+  lastVisitDate: getTodayString(),
+  theme: 'dark',
+  taskColumnWidth: 260,
+  interfaceLanguage: detectInterfaceLanguage(languages),
+});
+
+export const normalizeConfig = (
+  config: Partial<AppConfig> | undefined,
+  languages = getBrowserLanguages()
+): AppConfig => ({
+  ...createDefaultConfig(languages),
+  ...config,
+  interfaceLanguage: config?.interfaceLanguage ?? detectInterfaceLanguage(languages),
+});
+
 export const createConfigSlice: StateCreator<ConfigSlice> = (set) => ({
-  config: {
-    currentWeekStart: getWeekStart(),
-    lastVisitDate: getTodayString(),
-    theme: 'dark',
-    taskColumnWidth: 260,
-  },
+  config: createDefaultConfig(),
 
   updateConfig: (config) =>
     set((state) => ({ config: { ...state.config, ...config } })),
+
+  setInterfaceLanguage: (language) =>
+    set((state) => ({
+      config: {
+        ...state.config,
+        interfaceLanguage: language,
+      },
+    })),
 
   toggleTheme: () =>
     set((state) => ({

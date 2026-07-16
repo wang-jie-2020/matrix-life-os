@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 import { MODULE_REGISTRY } from './moduleRegistry';
 import AsciiButton from '../../components/AsciiButton';
@@ -6,6 +7,7 @@ import AsciiButton from '../../components/AsciiButton';
 const ModuleManager: React.FC = () => {
   const enabledModules = useAppStore((s) => s.enabledModules);
   const toggleModule = useAppStore((s) => s.toggleModule);
+  const { t } = useTranslation();
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
@@ -25,10 +27,10 @@ const ModuleManager: React.FC = () => {
           >
             <div>
               <div className="font-body" style={{ color: 'var(--text-primary)' }}>
-                {module.name}
+                {t(module.nameKey)}
               </div>
               <div className="font-caption" style={{ color: 'var(--text-secondary)' }}>
-                {module.description}
+                {t(module.descriptionKey)}
               </div>
             </div>
             <AsciiButton
@@ -37,15 +39,15 @@ const ModuleManager: React.FC = () => {
               }}
               disabled={module.core}
               frame="tight"
-              title={module.core ? 'Core module is always shown' : enabled ? 'Hide module' : 'Show module'}
-              ariaLabel={module.core ? 'Core module is always shown' : enabled ? 'Hide module' : 'Show module'}
+              title={module.core ? t('modules.coreAlwaysShown') : enabled ? t('modules.hide') : t('modules.show')}
+              ariaLabel={module.core ? t('modules.coreAlwaysShown') : enabled ? t('modules.hide') : t('modules.show')}
               style={{
                 border: '1px solid var(--border-primary)',
                 color: enabled ? 'var(--accent-gold)' : 'var(--text-secondary)',
                 whiteSpace: 'nowrap',
               }}
             >
-              {module.core ? 'CORE' : enabled ? 'ON' : 'OFF'}
+              {module.core ? t('modules.core') : enabled ? t('modules.on') : t('modules.off')}
             </AsciiButton>
           </div>
         );

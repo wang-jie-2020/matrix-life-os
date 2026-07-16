@@ -1,18 +1,21 @@
 import React from 'react';
 import AsciiBox from '../../components/AsciiBox';
+import { useTranslation } from '../../i18n/react';
 
 const ManualPanel: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
-    <AsciiBox title="Short Help">
+    <AsciiBox title={t('manual.title')}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
         <div className="font-body" style={{ color: 'var(--text-secondary)' }}>
-          Use Capture Notes for loose thoughts that are not dated tasks.
+          {t('manual.capture')}
         </div>
         <div className="font-body" style={{ color: 'var(--text-secondary)' }}>
-          Use the Weekly Task Board for tasks that belong to a specific day.
+          {t('manual.tasks')}
         </div>
         <div className="font-body" style={{ color: 'var(--text-secondary)' }}>
-          Use Goal Notes for simple goal text, and Reflections for dated review notes.
+          {t('manual.goalsReflections')}
         </div>
       </div>
     </AsciiBox>

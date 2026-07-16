@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AsciiBox from '../../components/AsciiBox';
 import AsciiButton from '../../components/AsciiButton';
+import { useTranslation } from '../../i18n/react';
 import { useAppStore } from '../../store/useAppStore';
 
 const CaptureNotesPanel: React.FC = () => {
@@ -11,6 +12,7 @@ const CaptureNotesPanel: React.FC = () => {
   const [draft, setDraft] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState('');
+  const { t } = useTranslation();
 
   const addNote = () => {
     const content = draft.trim();
@@ -28,7 +30,7 @@ const CaptureNotesPanel: React.FC = () => {
   };
 
   return (
-    <AsciiBox title="Capture Notes">
+    <AsciiBox title={t('capture.title')}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
         <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
           <input
@@ -37,7 +39,7 @@ const CaptureNotesPanel: React.FC = () => {
             onKeyDown={(event) => {
               if (event.key === 'Enter') addNote();
             }}
-            placeholder="Write a note to keep for later"
+            placeholder={t('capture.placeholder')}
             className="font-body"
             style={{
               flex: 1,
@@ -50,14 +52,14 @@ const CaptureNotesPanel: React.FC = () => {
               padding: 'var(--space-2) 0',
             }}
           />
-          <AsciiButton onClick={addNote} frame="tight" title="Add capture note" ariaLabel="Add capture note">
+          <AsciiButton onClick={addNote} frame="tight" title={t('capture.add')} ariaLabel={t('capture.add')}>
             +
           </AsciiButton>
         </div>
 
         {captureNotes.length === 0 ? (
           <div className="font-caption" style={{ color: 'var(--text-muted)' }}>
-            No capture notes yet.
+            {t('capture.empty')}
           </div>
         ) : (
           captureNotes.map((note) => (
@@ -103,8 +105,8 @@ const CaptureNotesPanel: React.FC = () => {
                   setEditingContent(note.content);
                 }}
                 frame="tight"
-                title="Edit capture note"
-                ariaLabel="Edit capture note"
+                title={t('capture.edit')}
+                ariaLabel={t('capture.edit')}
               >
                 ✎
               </AsciiButton>
@@ -112,8 +114,8 @@ const CaptureNotesPanel: React.FC = () => {
                 onClick={() => deleteCaptureNote(note.id)}
                 variant="danger"
                 frame="tight"
-                title="Delete capture note"
-                ariaLabel="Delete capture note"
+                title={t('capture.delete')}
+                ariaLabel={t('capture.delete')}
               >
                 x
               </AsciiButton>

@@ -1,6 +1,10 @@
+import type { TranslationKey } from '../i18n';
+
 export type DayColumn = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
 
 export type TaskStatus = 'active' | 'completed';
+
+export type InterfaceLanguage = 'en' | 'zh-CN';
 
 export interface Task {
   id: string;
@@ -41,6 +45,7 @@ export interface AppConfig {
   lastVisitDate: string;
   theme: 'dark' | 'light';
   taskColumnWidth?: number;
+  interfaceLanguage: InterfaceLanguage;
 }
 
 export type ModuleId =
@@ -52,8 +57,8 @@ export type ModuleId =
 
 export interface ModuleMeta {
   id: ModuleId;
-  name: string;
-  description: string;
+  nameKey: TranslationKey;
+  descriptionKey: TranslationKey;
   defaultEnabled: boolean;
   core: boolean;
 }

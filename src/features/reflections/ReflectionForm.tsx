@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Reflection } from '../../types';
+import { useTranslation } from '../../i18n/react';
 import AsciiButton from '../../components/AsciiButton';
 
 interface ReflectionFormProps {
@@ -14,6 +15,7 @@ const ReflectionForm: React.FC<ReflectionFormProps> = ({ existingReflection, def
   const updateReflection = useAppStore((s) => s.updateReflection);
   const [date, setDate] = useState(existingReflection?.date ?? defaultDate ?? new Date().toISOString().split('T')[0]);
   const [content, setContent] = useState(existingReflection?.content ?? '');
+  const { t } = useTranslation();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,7 +34,7 @@ const ReflectionForm: React.FC<ReflectionFormProps> = ({ existingReflection, def
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
       <label className="font-caption" style={{ color: 'var(--text-secondary)' }}>
-        Date
+        {t('reflection.date')}
         <input
           type="date"
           value={date}
@@ -51,7 +53,7 @@ const ReflectionForm: React.FC<ReflectionFormProps> = ({ existingReflection, def
       <textarea
         value={content}
         onChange={(event) => setContent(event.target.value)}
-        placeholder="Write the reflection"
+        placeholder={t('reflection.placeholder')}
         className="font-body"
         rows={6}
         style={{
@@ -67,8 +69,8 @@ const ReflectionForm: React.FC<ReflectionFormProps> = ({ existingReflection, def
       <AsciiButton
         type="submit"
         frame="tight"
-        title="Save reflection"
-        ariaLabel="Save reflection"
+        title={t('reflection.save')}
+        ariaLabel={t('reflection.save')}
         style={{ alignSelf: 'flex-start' }}
       >
         ✓

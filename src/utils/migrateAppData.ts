@@ -1,4 +1,5 @@
 import type { AppState } from '../types';
+import { normalizeConfig } from '../store/slices/configSlice';
 
 export const CURRENT_APP_VERSION = '0.3.0';
 
@@ -26,6 +27,7 @@ export function migrateAppData(state: AppState, targetVersion: string): AppState
     })),
     captureNotes: state.captureNotes || [],
     goalNotes: state.goalNotes || [],
+    config: normalizeConfig(state.config),
     reflections: ((state.reflections || []) as unknown[]).map((reflection) => {
       const record = reflection as Record<string, unknown>;
       return {
