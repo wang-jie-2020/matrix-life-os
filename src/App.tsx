@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import ActionDesk from './pages/ActionDesk';
 import ReviewArchive from './pages/ReviewArchive';
 import System from './pages/System';
@@ -52,7 +52,7 @@ const LanguageMenu = () => {
         title={t('language.openMenu')}
         ariaLabel={t('language.openMenu')}
       >
-        {t('language.label')}: {currentLanguageLabel}
+        {currentLanguageLabel}
       </AsciiButton>
       {isOpen && (
         <div
@@ -71,7 +71,7 @@ const LanguageMenu = () => {
           }}
         >
           <div className="font-caption" style={{ color: 'var(--text-muted)', marginBottom: 'var(--space-1)' }}>
-            {t('language.current')}: {currentLanguageLabel}
+            {currentLanguageLabel}
           </div>
           {supportedInterfaceLanguages.map((option) => {
             const active = option.code === language;

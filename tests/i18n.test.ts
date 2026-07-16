@@ -1,5 +1,4 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert/strict';
+import { describe, it, expect } from 'vitest';
 import {
   detectInterfaceLanguage,
   getInterfaceLanguageLabelKey,
@@ -10,35 +9,35 @@ import { createDefaultConfig, normalizeConfig } from '../src/store/slices/config
 
 describe('i18n resolver', () => {
   it('looks up English and Simplified Chinese copy', () => {
-    assert.equal(translate('en', 'nav.action'), 'Action');
-    assert.equal(translate('zh-CN', 'nav.action'), '操作');
+    expect(translate('en', 'nav.action')).toBe('Action')
+    expect(translate('zh-CN', 'nav.action')).toBe('操作')
   });
 
   it('shows missing keys in development and falls back to English in production', () => {
-    assert.equal(translate('zh-CN', 'test.missing' as TranslationKey, 'development'), '[[test.missing]]');
-    assert.equal(translate('zh-CN', 'test.missing' as TranslationKey, 'production'), 'test.missing');
-    assert.equal(translate('zh-CN', 'nav.action', 'production'), '操作');
+    expect(translate('zh-CN', 'test.missing' as TranslationKey, 'development')).toBe('[[test.missing]]')
+    expect(translate('zh-CN', 'test.missing' as TranslationKey, 'production')).toBe('test.missing')
+    expect(translate('zh-CN', 'nav.action', 'production')).toBe('操作')
   });
 
   it('detects Chinese system language and falls back to English for unsupported languages', () => {
-    assert.equal(detectInterfaceLanguage(['zh-Hans-CN']), 'zh-CN');
-    assert.equal(detectInterfaceLanguage(['fr-FR']), 'en');
+    expect(detectInterfaceLanguage(['zh-Hans-CN'])).toBe('zh-CN')
+    expect(detectInterfaceLanguage(['fr-FR'])).toBe('en')
   });
 
   it('resolves the current language label from supported language metadata', () => {
-    assert.equal(translate('en', getInterfaceLanguageLabelKey('en')), 'English');
-    assert.equal(translate('zh-CN', getInterfaceLanguageLabelKey('zh-CN')), '简体中文');
+    expect(translate('en', getInterfaceLanguageLabelKey('en'))).toBe('English')
+    expect(translate('zh-CN', getInterfaceLanguageLabelKey('zh-CN'))).toBe('简体中文')
   });
 });
 
 describe('interface language config', () => {
   it('defaults first launch language from the system language', () => {
-    assert.equal(createDefaultConfig(['zh-CN']).interfaceLanguage, 'zh-CN');
-    assert.equal(createDefaultConfig(['de-DE']).interfaceLanguage, 'en');
+    expect(createDefaultConfig(['zh-CN']).interfaceLanguage).toBe('zh-CN')
+    expect(createDefaultConfig(['de-DE']).interfaceLanguage).toBe('en')
   });
 
   it('normalizes older persisted config without changing explicit user language', () => {
-    assert.equal(
+    expect(
       normalizeConfig(
         {
           currentWeekStart: '2026-07-13',
@@ -47,11 +46,9 @@ describe('interface language config', () => {
           taskColumnWidth: 320,
         },
         ['zh-CN']
-      ).interfaceLanguage,
-      'zh-CN'
-    );
+      ).interfaceLanguage).toBe('zh-CN')
 
-    assert.equal(
+    expect(
       normalizeConfig(
         {
           currentWeekStart: '2026-07-13',
@@ -61,9 +58,7 @@ describe('interface language config', () => {
           interfaceLanguage: 'en',
         },
         ['zh-CN']
-      ).interfaceLanguage,
-      'en'
-    );
+      ).interfaceLanguage).toBe('en')
   });
 
   it('does not modify user-created content when interface language changes', () => {
@@ -77,8 +72,8 @@ describe('interface language config', () => {
     const before = structuredClone(userRecords);
     const config = normalizeConfig({ ...createDefaultConfig(['en']), interfaceLanguage: 'zh-CN' }, ['en']);
 
-    assert.equal(config.interfaceLanguage, 'zh-CN');
-    assert.deepEqual(userRecords, before);
+    expect(config.interfaceLanguage).toBe('zh-CN')
+    expect(userRecords).toEqual(before)
   });
 });
 
@@ -87,6 +82,6 @@ describe('locale coverage', () => {
     const { en } = await import('../src/i18n/locales/en.ts');
     const { zhCN } = await import('../src/i18n/locales/zh-CN.ts');
 
-    assert.deepEqual(Object.keys(zhCN).sort(), Object.keys(en).sort());
+    expect(Object.keys(zhCN).sort()).toEqual(Object.keys(en).sort())
   });
 });
