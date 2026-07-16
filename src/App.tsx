@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ActionDesk from './pages/ActionDesk';
 import ReviewArchive from './pages/ReviewArchive';
 import System from './pages/System';
+import AsciiButton from './components/AsciiButton';
 import { useDayMigration } from './hooks/useDayMigration';
 import { useDocumentTitle } from './hooks/useDocumentTitle';
 import { useAppStore } from './store/useAppStore';
@@ -78,21 +79,15 @@ function App() {
           {navButton('actionDesk', 'Action')}
           {navButton('reviewArchive', 'Review')}
           {navButton('system', 'System')}
-          <button
+          <AsciiButton
             onClick={toggleTheme}
             className="font-h2"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
-              padding: 'var(--space-1) var(--space-2)',
-            }}
+            frame="tight"
+            style={{ color: 'var(--text-secondary)' }}
             title="Toggle theme"
           >
-            {config.theme === 'dark' ? 'Light' : 'Dark'}
-          </button>
+            {config.theme === 'dark' ? '\u25D0' : '\u25D1'}
+          </AsciiButton>
         </div>
       </nav>
 
@@ -113,37 +108,30 @@ function App() {
           }}
         >
           <span>Data may not continue saving. Check Local Data Status in System.</span>
-          <button
+          <AsciiButton
             onClick={() => {
               setPage('system');
             }}
+            variant="danger"
             style={{
-              background: 'var(--bg-primary)',
-              border: 'none',
               color: 'var(--accent-danger)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
-              padding: '2px var(--space-2)',
               fontSize: '12px',
             }}
           >
             Open System
-          </button>
-          <button
+          </AsciiButton>
+          <AsciiButton
             onClick={() => setStorageWarning(false)}
+            variant="danger"
+            frame="tight"
             style={{
-              background: 'none',
-              border: 'none',
               color: 'var(--bg-primary)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
-              padding: '2px var(--space-2)',
               fontSize: '12px',
               opacity: 0.8,
             }}
           >
-            [x]
-          </button>
+            x
+          </AsciiButton>
         </div>
       )}
 

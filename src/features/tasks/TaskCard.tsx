@@ -3,6 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Task } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
+import AsciiButton from '../../components/AsciiButton';
 
 interface TaskCardProps {
   task: Task;
@@ -83,7 +84,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               padding: 0,
             }}
           >
-            {task.status === 'completed' ? '[x]' : '[ ]'}
+            {task.status === 'completed' ? '☑' : '☐'}
           </button>
           <span
             className="font-body"
@@ -98,30 +99,35 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           </span>
           {task.migratedFrom && (
             <span className="font-caption" style={{ color: 'var(--accent-gold)' }}>
-              moved
+              [MOVED]
             </span>
           )}
-          <button
+          <AsciiButton
             onPointerDown={(event) => event.stopPropagation()}
             onClick={(event) => {
               event.stopPropagation();
               setEditContent(task.content);
               setIsEditing(true);
             }}
-            className="font-caption"
+            frame="tight"
+            title="Edit task"
+            ariaLabel="Edit task"
           >
-            Edit
-          </button>
-          <button
+            ✎
+          </AsciiButton>
+          <AsciiButton
             onPointerDown={(event) => event.stopPropagation()}
             onClick={(event) => {
               event.stopPropagation();
               deleteTask(task.id);
             }}
-            className="font-caption"
+            variant="danger"
+            frame="tight"
+            title="Delete task"
+            ariaLabel="Delete task"
           >
-            Delete
-          </button>
+            x
+          </AsciiButton>
         </div>
       )}
       <style>{`

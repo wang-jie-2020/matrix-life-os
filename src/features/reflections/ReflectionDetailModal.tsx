@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { Reflection } from '../../types';
 import ReflectionForm from './ReflectionForm';
 import { useAppStore } from '../../store/useAppStore';
+import AsciiButton from '../../components/AsciiButton';
 
 interface ReflectionDetailModalProps {
   reflection: Reflection | null;
@@ -45,9 +46,9 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflectio
           <h3 className="font-h2" style={{ margin: 0, color: 'var(--accent-gold)' }}>
             {isEditing ? 'Edit Reflection' : `Reflection - ${reflection.date}`}
           </h3>
-          <button onClick={onClose} className="font-h2">
-            [x]
-          </button>
+          <AsciiButton onClick={onClose} className="font-h2" frame="tight" title="Close" ariaLabel="Close">
+            x
+          </AsciiButton>
         </div>
 
         {isEditing ? (
@@ -64,18 +65,26 @@ const ReflectionDetailModal: React.FC<ReflectionDetailModalProps> = ({ reflectio
               {reflection.content}
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-              <button onClick={() => setIsEditing(true)} className="font-caption">
-                Edit
-              </button>
-              <button
+              <AsciiButton
+                onClick={() => setIsEditing(true)}
+                frame="tight"
+                title="Edit reflection"
+                ariaLabel="Edit reflection"
+              >
+                ✎
+              </AsciiButton>
+              <AsciiButton
                 onClick={() => {
                   deleteReflection(reflection.id);
                   onClose();
                 }}
-                className="font-caption"
+                variant="danger"
+                frame="tight"
+                title="Delete reflection"
+                ariaLabel="Delete reflection"
               >
-                Delete
-              </button>
+                x
+              </AsciiButton>
             </div>
           </div>
         )}

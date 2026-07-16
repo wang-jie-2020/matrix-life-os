@@ -4,6 +4,7 @@ import { useDroppable } from '@dnd-kit/core';
 import type { DayColumn, Task } from '../../types';
 import TaskCard from './TaskCard';
 import { useAppStore } from '../../store/useAppStore';
+import AsciiButton from '../../components/AsciiButton';
 
 interface TaskColumnProps {
   date: string;
@@ -72,7 +73,7 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
         )}
         {isToday && (
           <div className="font-caption" style={{ color: 'var(--accent-gold)', marginTop: 'var(--space-1)' }}>
-            Today
+            TODAY
           </div>
         )}
       </div>
@@ -126,39 +127,34 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ date, column, tasks, title, dat
                 caretColor: 'var(--accent-gold)',
               }}
             />
-            <button
-              onMouseDown={(event) => event.preventDefault()}
+            <AsciiButton
+              onPointerDown={(event) => event.preventDefault()}
               onClick={handleAdd}
-              className="font-caption"
+              frame="tight"
+              title="Add task"
+              ariaLabel="Add task"
               style={{
-                background: 'var(--bg-tertiary)',
                 border: '1px solid var(--accent-gold)',
                 color: 'var(--accent-gold)',
-                fontFamily: 'var(--font-mono)',
-                padding: 'var(--space-1) var(--space-2)',
-                cursor: 'pointer',
               }}
             >
-              Add
-            </button>
+              +
+            </AsciiButton>
           </div>
         ) : (
-          <button
+          <AsciiButton
             onClick={() => setIsAdding(true)}
-            className="font-caption"
+            frame="tight"
+            title="Add task"
+            ariaLabel="Add task"
             style={{
-              background: 'none',
-              border: 'none',
               color: 'var(--text-muted)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-mono)',
               width: '100%',
               textAlign: 'center',
-              padding: 'var(--space-1)',
             }}
           >
-            [+]
-          </button>
+            +
+          </AsciiButton>
         )}
       </div>
     </div>

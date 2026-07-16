@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AsciiBox from '../../components/AsciiBox';
+import AsciiButton from '../../components/AsciiButton';
 import { useAppStore } from '../../store/useAppStore';
 
 const GoalNotesPanel: React.FC = () => {
@@ -49,9 +50,9 @@ const GoalNotesPanel: React.FC = () => {
               padding: 'var(--space-2) 0',
             }}
           />
-          <button onClick={addNote} className="font-caption btn-invert">
-            [ Add ]
-          </button>
+          <AsciiButton onClick={addNote} frame="tight" title="Add goal note" ariaLabel="Add goal note">
+            +
+          </AsciiButton>
         </div>
 
         {goalNotes.length === 0 ? (
@@ -96,18 +97,26 @@ const GoalNotesPanel: React.FC = () => {
                   {note.content}
                 </span>
               )}
-              <button
+              <AsciiButton
                 onClick={() => {
                   setEditingId(note.id);
                   setEditingContent(note.content);
                 }}
-                className="font-caption"
+                frame="tight"
+                title="Edit goal note"
+                ariaLabel="Edit goal note"
               >
-                Edit
-              </button>
-              <button onClick={() => deleteGoalNote(note.id)} className="font-caption">
-                Delete
-              </button>
+                ✎
+              </AsciiButton>
+              <AsciiButton
+                onClick={() => deleteGoalNote(note.id)}
+                variant="danger"
+                frame="tight"
+                title="Delete goal note"
+                ariaLabel="Delete goal note"
+              >
+                x
+              </AsciiButton>
             </div>
           ))
         )}

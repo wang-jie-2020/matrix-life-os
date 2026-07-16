@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { MODULE_REGISTRY } from './moduleRegistry';
+import AsciiButton from '../../components/AsciiButton';
 
 const ModuleManager: React.FC = () => {
   const enabledModules = useAppStore((s) => s.enabledModules);
@@ -30,24 +31,22 @@ const ModuleManager: React.FC = () => {
                 {module.description}
               </div>
             </div>
-            <button
+            <AsciiButton
               onClick={() => {
                 if (!module.core) toggleModule(module.id);
               }}
-              className="font-caption"
+              disabled={module.core}
+              frame="tight"
+              title={module.core ? 'Core module is always shown' : enabled ? 'Hide module' : 'Show module'}
+              ariaLabel={module.core ? 'Core module is always shown' : enabled ? 'Hide module' : 'Show module'}
               style={{
-                background: 'none',
                 border: '1px solid var(--border-primary)',
                 color: enabled ? 'var(--accent-gold)' : 'var(--text-secondary)',
-                cursor: module.core ? 'not-allowed' : 'pointer',
-                fontFamily: 'var(--font-mono)',
-                padding: 'var(--space-1) var(--space-2)',
                 whiteSpace: 'nowrap',
-                opacity: module.core ? 0.7 : 1,
               }}
             >
-              {module.core ? 'Always shown' : enabled ? 'Shown' : 'Hidden'}
-            </button>
+              {module.core ? 'CORE' : enabled ? 'ON' : 'OFF'}
+            </AsciiButton>
           </div>
         );
       })}

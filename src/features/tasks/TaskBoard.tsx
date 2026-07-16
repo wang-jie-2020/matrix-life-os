@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { format, addDays } from 'date-fns';
 import TaskColumn from './TaskColumn';
+import AsciiButton from '../../components/AsciiButton';
 import { useAppStore } from '../../store/useAppStore';
 import {
   getWeekStart,
@@ -45,19 +46,34 @@ const TaskBoard: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <button onClick={() => setWeekStart(getPrevWeekStart(weekStart))} className="font-caption">
-          Previous Week
-        </button>
+        <AsciiButton
+          onClick={() => setWeekStart(getPrevWeekStart(weekStart))}
+          frame="tight"
+          title="Previous week"
+          ariaLabel="Previous week"
+        >
+          {'<'}
+        </AsciiButton>
         <span className="font-h3" style={{ color: 'var(--accent-gold)' }}>
           {format(new Date(weekStart), 'yyyy-MM-dd')} to {format(addDays(new Date(weekStart), 6), 'yyyy-MM-dd')}
         </span>
-        <button onClick={() => setWeekStart(getNextWeekStart(weekStart))} className="font-caption">
-          Next Week
-        </button>
+        <AsciiButton
+          onClick={() => setWeekStart(getNextWeekStart(weekStart))}
+          frame="tight"
+          title="Next week"
+          ariaLabel="Next week"
+        >
+          {'>'}
+        </AsciiButton>
         {!isCurrentWeek && (
-          <button onClick={() => setWeekStart(getWeekStart())} className="font-caption">
-            Current Week
-          </button>
+          <AsciiButton
+            onClick={() => setWeekStart(getWeekStart())}
+            frame="tight"
+            title="Current week"
+            ariaLabel="Current week"
+          >
+            *
+          </AsciiButton>
         )}
       </div>
 

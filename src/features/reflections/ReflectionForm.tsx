@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Reflection } from '../../types';
+import AsciiButton from '../../components/AsciiButton';
 
 interface ReflectionFormProps {
   existingReflection?: Reflection;
@@ -63,9 +64,15 @@ const ReflectionForm: React.FC<ReflectionFormProps> = ({ existingReflection, def
           outline: 'none',
         }}
       />
-      <button type="submit" className="font-caption btn-invert" style={{ alignSelf: 'flex-start' }}>
-        [ Save ]
-      </button>
+      <AsciiButton
+        type="submit"
+        frame="tight"
+        title="Save reflection"
+        ariaLabel="Save reflection"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        ✓
+      </AsciiButton>
     </form>
   );
 };
