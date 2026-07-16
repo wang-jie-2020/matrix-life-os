@@ -1,5 +1,39 @@
 # 当前实现
 
+## Interface Language architecture
+
+Interface Language is stored as part of persisted application configuration:
+
+```ts
+type InterfaceLanguage = 'en' | 'zh-CN';
+```
+
+`AppConfig` includes `interfaceLanguage`. Existing persisted config that does not contain `interfaceLanguage` is normalized through the store initialization or migration path so components can treat the field as present.
+
+The first-launch default is detected from the system/browser language:
+
+- languages beginning with `zh` use `zh-CN`
+- unsupported languages fall back to `en`
+
+After the user chooses a language, the selected `interfaceLanguage` is persisted and no longer follows system language changes automatically.
+
+UI copy is organized by locale file:
+
+```text
+src/i18n/
+  index.ts
+  types.ts
+  locales/
+    en.ts
+    zh-CN.ts
+```
+
+Feature components read product UI copy through i18n keys. Missing keys show `[[key]]` in development and fall back to English in production.
+
+The top navigation owns the Interface Language menu. The menu displays the current language, opens a list of available languages, switches immediately when a language is selected, and closes on selection, outside click, or Escape.
+
+The i18n layer translates application UI text only. It must not translate or modify persisted user-created records.
+
 本文档从产品结构层面描述当前实现。它不是产品范围定义；产品需求以 `docs/PRD.md` 为准。
 
 ## 运行形态

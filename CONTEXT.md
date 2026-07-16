@@ -1,5 +1,20 @@
 # Matrix Life OS
 
+**Interface Language**: The language preference used for product interface text. Interface Language changes application UI copy only. It does not translate or rewrite user-created Task, Capture Note, Goal Note, or Reflection content. Chinese UI labels are interface copy, not new canonical domain terms.
+
+Chinese UI labels for canonical terms:
+
+- Task: 任务
+- Weekly Task Board: 周任务板
+- Capture Note: 捕捉笔记
+- Goal Note: 目标笔记
+- Reflection: 回顾
+- Action Area: 操作区
+- Review Area: 回顾区
+- System Area: 系统区
+- Local Data Status: 本地数据状态
+- Interface Language: 界面语言
+
 Matrix Life OS 的产品上下文：一个本地优先的个人管理工具，围绕带日期的任务、松散记录、目标记录、反思和本地数据状态展开。
 
 ## 语言

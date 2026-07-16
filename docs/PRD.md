@@ -1,5 +1,28 @@
 # PRD
 
+## Interface Language
+
+Matrix Life OS must support Interface Language as an application-level display preference.
+
+The product must allow the user to switch application UI copy between:
+
+- English (`en`)
+- Simplified Chinese (`zh-CN`)
+
+The language system must be designed so more interface languages can be added later without changing feature component logic.
+
+Interface Language affects product UI copy, including navigation, commands, empty states, help text, system status, module names, and weekday labels. It must not translate, rewrite, or otherwise modify user-created Task, Capture Note, Goal Note, or Reflection content.
+
+On first launch, Matrix Life OS must choose the initial Interface Language from the system/browser language. If the system language is unsupported, the initial language must be English. After the user chooses an Interface Language, the choice must be persisted and must not automatically change when the system language changes.
+
+The top navigation must include an Interface Language menu. Selecting a language from the menu switches immediately and does not require confirmation.
+
+All current product-scope user-visible UI copy must be provided through i18n keys. Components must not contain inline user-visible product copy, except for user-created content, generated dates or numbers, symbolic command glyphs, and internal technical literals.
+
+For Simplified Chinese UI, product terms are translated as interface labels. Canonical domain terms remain English in the domain model, code, and architecture documentation.
+
+Weekday labels follow Interface Language. Date and number formats remain unchanged in the first version.
+
 本文档描述 Matrix Life OS 应该做什么。它不描述代码结构或实现细节。
 
 ## 产品概述
