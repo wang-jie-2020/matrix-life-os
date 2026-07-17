@@ -1,7 +1,7 @@
 {
   "name": "matrix-life-os",
   "private": true,
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "A local-first personal management app",
   "author": "Matrix Life OS Contributors",
   "type": "module",
